@@ -23,6 +23,7 @@ var c = canvas.getContext("2d");
 var p1 = new Image();
 var p2 = new Image();
 var bushImage = new Image();
+var p_possible_move = new Image();
 
 
 var w1 = new Image();
@@ -33,6 +34,7 @@ var w4 = new Image();
 p1.src = "assets/p1.png";
 p2.src = "assets/p2.png";
 bushImage.src = "assets/bush.png";
+p_possible_move.src = "assets/square_move.png";
 
 w1.src = "assets/weapon1.png";
 w2.src = "assets/weapon2.png";
@@ -86,13 +88,23 @@ function updateBoard() {
             }
 
             xPos += 80;
-
         }
         xPos = 0;
         yPos += 80;
     }
+
 }
 
+function possibleMoves() {
+    //calculate players possible movements
+    var i1 = 1;
+
+    while (i1 < 4 && board.layout[player1.y + i1][player1.x] != gameConstant.BUSH && board.layout[player1.y + i1][player1.x] != gameConstant.PLAYER2) {
+        c.drawImage(p_possible_move, player1.x * 80, (player1.y + i1) * 80);
+        i1++;
+    }
+
+}
 /*---------------------------------------------------------------*/
 /*-----------------------DOM Manipulation------------------------*/
 /*---------------------------------------------------------------*/

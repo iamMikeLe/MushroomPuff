@@ -41,7 +41,7 @@ var gameConstant = {
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 // 1.1 - Board Object
-function Board(width, height){
+function Board(width, height) {
     this.width = width;
     this.height = height;
     this.layout = [];
@@ -142,6 +142,10 @@ function Player(playerId, hp, activeGun) {
     this.moveDirection;
 
 
+    this.getPos = function () {
+        console.log("[" + this.x + ", " + this.y + "]");
+    }
+
     this.move = function (direction) {
 
         switch (direction) {
@@ -240,7 +244,7 @@ function action(e) {
         clearConsole();
     }
 
-    function moveAction(direction){
+    function moveAction(direction) {
 
         if (playerMoving.moveDistance >= gameConstant.MAX_MOVE_DISTANCE) {
             consoleOutput.innerHTML = "You cannot move anymore! Only attack or Finish round";
@@ -329,6 +333,7 @@ function action(e) {
             playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
             console.log("End round - Q key: " + e.keyCode);
             updateDom();
+            possibleMoves();
             break;
 
 
