@@ -35,7 +35,7 @@ var gameConstant = {
     GUN_BALL: 5,
     GUN_BOMB: 6,
     PLAYER1: 8,
-    PLAYER2:9
+    PLAYER2: 9
 }
 
 
@@ -61,7 +61,7 @@ function Gun(name, id, damage) {
 
 /*-------------------------------------------------------------------*/
 // 1.3 - Player
-function Player(playerId, hp, activeGun){
+function Player(playerId, hp, activeGun) {
     this.x = 0;
     this.y = 0;
     this.playerId = playerId;
@@ -122,10 +122,10 @@ function Player(playerId, hp, activeGun){
 
 /*-------------------------------------------------------------------*/
 //1.4 Init Object for generating game
-function Init(){
+function Init() {
 
     // Board method generator 
-    this.gameBoard = function (boardName){
+    this.gameBoard = function (boardName) {
         for (i = 0; i < boardName.width; i++) {
             boardName.layout.push([]);
 
@@ -143,7 +143,7 @@ function Init(){
             var x = Math.floor(Math.random() * boardName.layout.length);
             var y = Math.floor(Math.random() * boardName.layout[0].length);
 
-            while (boardName.layout[x][y] == 1) {
+            while (boardName.layout[x][y] == gameConstant.BUSH) {
                 x = Math.floor(Math.random() * boardName.layout.length);
                 y = Math.floor(Math.random() * boardName.layout[0].length);
             }
@@ -269,33 +269,34 @@ function updateBoard() {
 
             c.strokeRect(xPos, yPos, 80, 80);
 
-            if (game1.layout[x][y] == 1) {
+
+            if (game1.layout[x][y] == gameConstant.BUSH) {
                 c.drawImage(bushImage, xPos, yPos);
             }
 
-            if (game1.layout[x][y] == 3) {
+            if (game1.layout[x][y] == gameConstant.GUN_BALOON) {
                 //create animation here
                 c.drawImage(w1, xPos, yPos);
             }
 
-            if (game1.layout[x][y] == 4) {
+            if (game1.layout[x][y] == gameConstant.GUN_BAT) {
                 //create animation here
                 c.drawImage(w2, xPos, yPos);
             }
 
-            if (game1.layout[x][y] == 5) {
+            if (game1.layout[x][y] == gameConstant.GUN_BALL) {
                 c.drawImage(w3, xPos, yPos);
             }
 
-            if (game1.layout[x][y] == 6) {
+            if (game1.layout[x][y] == gameConstant.GUN_BOMB) {
                 c.drawImage(w4, xPos, yPos);
             }
 
-            if (game1.layout[x][y] == 8) {
+            if (game1.layout[x][y] == gameConstant.PLAYER1) {
                 c.drawImage(p1, xPos, yPos);
             }
 
-            if (game1.layout[x][y] == 9) {
+            if (game1.layout[x][y] == gameConstant.PLAYER2) {
                 c.drawImage(p2, xPos, yPos);
             }
 
@@ -339,7 +340,8 @@ function action(e) {
             var gunOnTheMap;
             var mapObject = game1.layout[playerMoving.y][playerMoving.x];
 
-            if (mapObject == 3 || mapObject == 4 || mapObject == 5 || mapObject == 6) {
+
+            if (mapObject == gameConstant.GUN_BALOON || mapObject == gameConstant.GUN_BAT || mapObject == gameConstant.GUN_BALL || mapObject == gameConstant.GUN_BOMB) {
                 gunOnTheMap = mapObject;
                 playerMoving.gunInventory.push(gunOnTheMap);
             }
