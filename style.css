@@ -11,6 +11,7 @@
  }
 
  .game_console,
+ .start_section,
  .player1,
  .player2,
  .rules {
@@ -19,9 +20,24 @@
  }
 
  .rules,
+ .start_section,
  .game_console {
      width: 400px;
  }
+
+.start_section{
+    text-align: center;
+}
+
+.start_section button{
+    padding: 5px 15px;
+    margin: 15px;
+    background-color: #0283cb;
+    color:white;
+    border-color: #0283cb;
+
+
+}
 
  .player_info div {
      width: 184px;
