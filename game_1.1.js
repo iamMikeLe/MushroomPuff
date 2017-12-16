@@ -42,7 +42,7 @@ var gameConstant = {
     HIGH_DMG: 20,
     ULTRA_DMG: 25,
     MAX_MOVE_DISTANCE: 3,
-    MIN_MOVE_DISTANCE: 3,
+    MIN_MOVE_DISTANCE: 0,
 
     UP_ARROW: 38,
     RIGHT_ARROW: 39,
@@ -364,7 +364,7 @@ function action(e) {
         }
     }
 
-    switch (e.keyCode) {
+    switch(e.keyCode) {
 
         case gameConstant.UP_ARROW:
             moveAction("up");
