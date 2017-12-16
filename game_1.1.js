@@ -35,7 +35,20 @@ var gameConstant = {
     GUN_BALL: 5,
     GUN_BOMB: 6,
     PLAYER1: 8,
-    PLAYER2: 9
+    PLAYER2: 9,
+    PLAYER_HP: 100,
+    LOW_DMG: 5,
+    MED_DMG: 10,
+    HIGH_DMG: 20,
+    ULTRA_DMG: 25,
+    MAX_MOVE_DISTANCE: 3,
+    MIN_MOVE_DISTANCE: 3,
+
+    UP_ARROW: 38,
+    RIGHT_ARROW: 39,
+    DOWN_ARROW: 40,
+    LEFT_ARROW: 37,
+    Q_KEYBOARD: 81
 }
 
 
@@ -46,9 +59,6 @@ function Board(width, height) {
     this.height = height;
     this.layout = [];
 
-    this.display = function () {
-        return this.layout;
-    }
 }
 
 /*-------------------------------------------------------------------*/
@@ -71,11 +81,11 @@ function Player(playerId, hp, activeGun) {
     this.moveDirection;
 
 
-    this.move = function (direction) {
+    this.move = function(direction) {
 
         switch (direction) {
             case "up":
-                if (this.y - 1 < 0 || game1.layout[this.y - 1][this.x] == gameConstant.PLAYER2 || game1.layout[this.y - 1][this.x] == gameConstant.PLAYER1 || game1.layout[this.y - 1][this.x] == gameConstant.BUSH) {
+                if (this.y - 1 < 0 || board.layout[this.y - 1][this.x] == gameConstant.PLAYER2 || board.layout[this.y - 1][this.x] == gameConstant.PLAYER1 || board.layout[this.y - 1][this.x] == gameConstant.BUSH) {
                     console.log("This move is not possible!");
                 } else {
                     this.y = this.y - 1;
@@ -85,7 +95,7 @@ function Player(playerId, hp, activeGun) {
                 break;
 
             case "right":
-                if (this.x + 1 > 9 || game1.layout[this.y][this.x + 1] == gameConstant.PLAYER2 || game1.layout[this.y][this.x + 1] == gameConstant.PLAYER1 || game1.layout[this.y][this.x + 1] == gameConstant.BUSH) {
+                if (this.x + 1 > 9 || board.layout[this.y][this.x + 1] == gameConstant.PLAYER2 || board.layout[this.y][this.x + 1] == gameConstant.PLAYER1 || board.layout[this.y][this.x + 1] == gameConstant.BUSH) {
                     console.log("This move is not possible!");
                 } else {
                     this.x = this.x + 1;
@@ -95,7 +105,7 @@ function Player(playerId, hp, activeGun) {
                 break;
 
             case "down":
-                if (this.y + 1 > 9 || game1.layout[this.y + 1][this.x] == gameConstant.PLAYER2 || game1.layout[this.y + 1][this.x] == gameConstant.PLAYER1 || game1.layout[this.y + 1][this.x] == gameConstant.BUSH) {
+                if (this.y + 1 > 9 || board.layout[this.y + 1][this.x] == gameConstant.PLAYER2 || board.layout[this.y + 1][this.x] == gameConstant.PLAYER1 || board.layout[this.y + 1][this.x] == gameConstant.BUSH) {
                     console.log("This move is not possible!");
                 } else {
                     this.y = this.y + 1;
@@ -105,7 +115,7 @@ function Player(playerId, hp, activeGun) {
                 break;
 
             case "left":
-                if (this.x - 1 < 0 || game1.layout[this.y][this.x - 1] == gameConstant.PLAYER2 || game1.layout[this.y][this.x - 1] == gameConstant.PLAYER1 || game1.layout[this.y][this.x - 1] == gameConstant.BUSH) {
+                if (this.x - 1 < 0 || board.layout[this.y][this.x - 1] == gameConstant.PLAYER2 || board.layout[this.y][this.x - 1] == gameConstant.PLAYER1 || board.layout[this.y][this.x - 1] == gameConstant.BUSH) {
                     console.log("This move is not possible!");
                 } else {
                     this.x = this.x - 1;
@@ -188,34 +198,34 @@ function Init() {
 
 /*-------------------------------------------------------------------*/
 // 2.0 - Creating objects instances
-var game1 = new Board(10, 10);
+var board = new Board(10, 10);
 var init = new Init();
 
-var gun0 = new Gun("Baloon", 3, 5);
-var gun1 = new Gun("Bat", 4, 10);
-var gun2 = new Gun("Ball", 5, 20);
-var gun3 = new Gun("Bomb", 6, 30);
+var gun0 = new Gun("Baloon", gameConstant.GUN_BALOON, gameConstant.LOW_DMG);
+var gun1 = new Gun("Bat", gameConstant.GUN_BAT, gameConstant.MED_DMG);
+var gun2 = new Gun("Ball", gameConstant.GUN_BALL, gameConstant.HIGH_DMG);
+var gun3 = new Gun("Bomb", gameConstant.GUN_BOMB, gameConstant.ULTRA_DMG);
 
-var player1 = new Player(8, 100, gun0.id);
-var player2 = new Player(9, 100, gun0.id);
+var player1 = new Player(gameConstant.PLAYER1, gameConstant.PLAYER_HP, gun0.id);
+var player2 = new Player(gameConstant.PLAYER2, gameConstant.PLAYER_HP, gun0.id);
 var player1Turn = true; //to check whos turn it is
 
 
 /*-------------------------------------------------------------------*/
 // 3.0 - Start function - starts the game once called
 function start() {
-    game1.layout = [];
-    init.gameBoard(game1);
-    init.gameBush(game1);
+    board.layout = [];
+    init.gameBoard(board);
+    init.gameBush(board);
 
-    init.gameGun(game1, gun1.id);
-    init.gameGun(game1, gun2.id);
-    init.gameGun(game1, gun3.id);
+    init.gameGun(board, gun1.id);
+    init.gameGun(board, gun2.id);
+    init.gameGun(board, gun3.id);
 
-    init.gamePlayer(game1, player1);
-    init.gamePlayer(game1, player2);
+    init.gamePlayer(board, player1);
+    init.gamePlayer(board, player2);
 
-    console.log(game1.display());
+    console.log(board.layout);
 
     //why does this work? I am not sure
     canvas.width = canvas.width;
@@ -264,39 +274,39 @@ function updateBoard() {
     var xPos = 0;
     var yPos = 0;
 
-    for (var x = 0; x < game1.layout.length; x++) {
-        for (var y = 0; y < game1.layout[x].length; y++) {
+    for (var x = 0; x < board.layout.length; x++) {
+        for (var y = 0; y < board.layout[x].length; y++) {
 
             c.strokeRect(xPos, yPos, 80, 80);
 
 
-            if (game1.layout[x][y] == gameConstant.BUSH) {
+            if (board.layout[x][y] == gameConstant.BUSH) {
                 c.drawImage(bushImage, xPos, yPos);
             }
 
-            if (game1.layout[x][y] == gameConstant.GUN_BALOON) {
+            if (board.layout[x][y] == gameConstant.GUN_BALOON) {
                 //create animation here
                 c.drawImage(w1, xPos, yPos);
             }
 
-            if (game1.layout[x][y] == gameConstant.GUN_BAT) {
+            if (board.layout[x][y] == gameConstant.GUN_BAT) {
                 //create animation here
                 c.drawImage(w2, xPos, yPos);
             }
 
-            if (game1.layout[x][y] == gameConstant.GUN_BALL) {
+            if (board.layout[x][y] == gameConstant.GUN_BALL) {
                 c.drawImage(w3, xPos, yPos);
             }
 
-            if (game1.layout[x][y] == gameConstant.GUN_BOMB) {
+            if (board.layout[x][y] == gameConstant.GUN_BOMB) {
                 c.drawImage(w4, xPos, yPos);
             }
 
-            if (game1.layout[x][y] == gameConstant.PLAYER1) {
+            if (board.layout[x][y] == gameConstant.PLAYER1) {
                 c.drawImage(p1, xPos, yPos);
             }
 
-            if (game1.layout[x][y] == gameConstant.PLAYER2) {
+            if (board.layout[x][y] == gameConstant.PLAYER2) {
                 c.drawImage(p2, xPos, yPos);
             }
 
@@ -318,19 +328,19 @@ function action(e) {
         playerMoving = player2;
     }
 
-    function moveAction(direction) {
+    function moveAction(direction){
 
-        if (playerMoving.moveDistance >= 3) {
+        if (playerMoving.moveDistance >= gameConstant.MAX_MOVE_DISTANCE) {
             console.log("You cannot move anymore!");
-        } else if (playerMoving.moveDistance > 0 && direction !== playerMoving.moveDirection) {
+        } else if (playerMoving.moveDistance > gameConstant.MIN_MOVE_DISTANCE && direction !== playerMoving.moveDirection) {
             console.log("You cannot move " + direction + ". You can only move " + playerMoving.moveDirection);
         } else {
 
             if (playerMoving.gunInventory.length > 1) {
-                game1.layout[playerMoving.y][playerMoving.x] = playerMoving.gunInventory[0];
+                board.layout[playerMoving.y][playerMoving.x] = playerMoving.gunInventory[0];
                 playerMoving.gunInventory.shift();
             } else {
-                game1.layout[playerMoving.y][playerMoving.x] = 0;
+                board.layout[playerMoving.y][playerMoving.x] = gameConstant.EMPTY;
             }
 
             playerMoving.move(direction);
@@ -338,7 +348,7 @@ function action(e) {
             //---------------
             // this will add gun into inventory if player cross one
             var gunOnTheMap;
-            var mapObject = game1.layout[playerMoving.y][playerMoving.x];
+            var mapObject = board.layout[playerMoving.y][playerMoving.x];
 
 
             if (mapObject == gameConstant.GUN_BALOON || mapObject == gameConstant.GUN_BAT || mapObject == gameConstant.GUN_BALL || mapObject == gameConstant.GUN_BOMB) {
@@ -347,7 +357,7 @@ function action(e) {
             }
             //---------------
 
-            game1.layout[playerMoving.y][playerMoving.x] = playerMoving.playerId;
+            board.layout[playerMoving.y][playerMoving.x] = playerMoving.playerId;
             updateBoard();
             console.log(direction + " arrow: " + e.keyCode);
             playerMoving.moveDirection = direction;
@@ -356,30 +366,30 @@ function action(e) {
 
     switch (e.keyCode) {
 
-        case 38:
+        case gameConstant.UP_ARROW:
             moveAction("up");
             break;
 
-        case 39:
+        case gameConstant.RIGHT_ARROW:
             moveAction("right");
             break;
 
-        case 40:
+        case gameConstant.DOWN_ARROW:
             moveAction("down");
             break;
 
-        case 37:
+        case gameConstant.LEFT_ARROW:
             moveAction("left");
             break;
 
-        case 81:
+        case gameConstant.Q_KEYBOARD:
             if (player1Turn) {
                 player1Turn = false;
             } else {
                 player1Turn = true;
             }
 
-            playerMoving.moveDistance = 0;
+            playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
             console.log("End round - Q key: " + e.keyCode);
             break;
 
