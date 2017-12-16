@@ -1,0 +1,57 @@
+ canvas {
+     border: solid black 1px;
+     background-image: url("assets/background.png")
+ }
+
+ #game_container,
+ .game_info,
+ .player1,
+ .player2 {
+     float: left;
+ }
+
+ .game_console,
+ .player1,
+ .player2,
+ .rules {
+     border: 1px solid black;
+     padding: 15px;
+ }
+
+ .rules,
+ .game_console {
+     width: 400px;
+ }
+
+ .player_info div {
+     width: 184px;
+ }
+
+ #p1_hp,
+ #p2_hp {
+     color: green;
+     font-weight: 800;
+ }
+
+ #p1_weapon,
+ #p2_weapon {
+     color: red;
+     font-weight: 800;
+ }
+
+ #p1_damage,
+ #p2_damage {
+     color: darkblue;
+     font-weight: 800;
+ }
+
+ #p1_movement,
+ #p2_movement {
+     color: saddlebrown;
+     font-weight: 800;
+ }
+
+ #consoleOutput {
+     color: firebrick;
+     font-weight: 800;
+ }

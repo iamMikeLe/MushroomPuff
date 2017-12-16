@@ -1,22 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
-    <style>
-        canvas{border: solid black 1px; background-image: url("assets/background.png")}
-    </style>
+    <title>6th Project</title>
+    <link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
+    <div id="game_container">
+        <canvas id="game"></canvas>
+        <br>
+        <button onclick="start();">Start</button>
+    </div>
 
-<canvas id="game"></canvas>
- <br>
-  <button onclick="start();">Start</button>
+    <div class="game_info">
+        <div class="rules">
+            <h3>Rules:</h3>
+            <p>For each turn, a player can move from one to three boxes (horizontally or vertically) before ending their turn (Q keyboard). If a player passes over a box containing a weapon, they leave their current weapon on site and replace it with the new one.</p>
+        </div>
+        <div class="game_console">
+            <h3>Game Console:</h3>
+            <p id="consoleOutput">You will see game instructions here</p>
+        </div>
 
-  <script src="jquery-3.2.1.min.js"></script>
-   
+        <div class="player_info">
+            <div class="player1">
+               <img src="assets/p1.png" alt="Player1">
+                <h3 id="p1_turn">Player 1</h3>
+                <ul>
+                    <li><strong>HP:</strong> <span id="p1_hp"></span></li>
+                    <li><strong>Weapon:</strong> <span id="p1_weapon"></span></li>
+                    <li><strong>Damage:</strong> <span id="p1_damage"></span></li>
+                    <li><strong>Movement(s) left:</strong> <span id="p1_movement"></span></li>
+                </ul>
+            </div>
+            <div class="player2">
+               <img src="assets/p2.png" alt="Player1">
+                <h3 id="p2_turn">Player 2</h3>
+
+                <ul>
+                    <li><strong>HP:</strong> <span id="p2_hp"></span></li>
+                    <li><strong>Weapon:</strong> <span id="p2_weapon"></span></li>
+                    <li><strong>Damage:</strong> <span id="p2_damage"></span></li>
+                    <li><strong>Movement(s) left:</strong> <span id="p2_movement"></span></li>
+                </ul>
+            </div>
+
+        </div>
+
+
+    </div>
+
+    <script src="jquery-3.2.1.min.js"></script>
+
     <script src="game_1.1.js"></script>
+    <script src="game_info.js"></script>
 </body>
+
 </html>

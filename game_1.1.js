@@ -1,31 +1,17 @@
 /*
 Content:
 0.0 - Game constants
-1.1 - Board constructor 
-1.2 - Gun constructor
-1.3 - Player constructor
-1.4 - Init constructor - contains generating methods for initializing Board, Gun, Players, Bushes
+1.1 - Board Object constructor
+1.2 - Gun Object constructor
+1.3 - Player Object constructor
 2.0 - Creating objects instances
 3.0 - Start function
-4.0 - Creating Canvas
-4.1 - Creating Sprites
-4.2 - UpdateBoard function - updates Canvas instances once Called
-5.0 - Event listener
-*/
-
-
-
-/*
-
-var gun0 = new Gun("Baloon", 3, 5);
-var gun1 = new Gun("Bat", 4, 10);
-var gun2 = new Gun("Ball", 5, 20);
-var gun3 = new Gun("Bomb", 6, 30);
-
-var player1 = new Player(8, 100, gun0.id, 0, 0);
-var player2 = new Player(9, 100, gun0.id, 0, 0);
+4.0 - Event listener
 
 */
+
+/*-------------------------------------------------------------------*/
+/*-------------------------------------------------------------------*/
 // 0.0 - Game constants
 var gameConstant = {
     EMPTY: 0,
@@ -52,15 +38,89 @@ var gameConstant = {
 }
 
 
-
+/*-------------------------------------------------------------------*/
+/*-------------------------------------------------------------------*/
 // 1.1 - Board Object
-function Board(width, height) {
+function Board(width, height){
     this.width = width;
     this.height = height;
     this.layout = [];
 
+
+    // Board method generator - generates empty space
+    this.gameBoard = function () {
+        for (i = 0; i < this.width; i++) {
+            this.layout.push([]);
+
+            for (z = 0; z < this.height; z++) {
+                this.layout[i][z] = gameConstant.EMPTY;
+            }
+        }
+    }
+
+    //Bush method genetaror - adds bushes into the game
+    this.gameBush = function () {
+        var bush = Math.floor(Math.random() * (this.width * this.width * 0.12) + 8);
+
+        for (i = 0; i < bush; i++) {
+            var x = Math.floor(Math.random() * this.layout.length);
+            var y = Math.floor(Math.random() * this.layout[0].length);
+
+            while (this.layout[x][y] == gameConstant.BUSH) {
+                x = Math.floor(Math.random() * this.layout.length);
+                y = Math.floor(Math.random() * this.layout[0].length);
+            }
+
+            this.layout[x][y] = gameConstant.BUSH;
+            console.log("number of bushes generated: " + bush);
+        }
+
+
+    }
+
+
+    //Gun method generator - adds guns into the game
+    this.gameGun = function (gunId) {
+        var y = Math.floor(Math.random() * this.layout.length);
+        var z = Math.floor(Math.random() * this.layout[0].length);
+
+        while (!(this.layout[y][z] == gameConstant.EMPTY)) {
+            y = Math.floor(Math.random() * this.layout.length);
+            z = Math.floor(Math.random() * this.layout[0].length);
+        }
+        this.layout[y][z] = gunId;
+    }
+
+    //Player method generator - adds players into the game
+    this.gamePlayer = function (player) {
+        player.x = Math.floor(Math.random() * this.layout.length);
+        player.y = Math.floor(Math.random() * this.layout[0].length);
+
+        while (!(this.layout[player.x][player.y] == gameConstant.EMPTY)) {
+            player.x = Math.floor(Math.random() * this.layout.length);
+            player.y = Math.floor(Math.random() * this.layout[0].length);
+        }
+
+        this.layout[player.y][player.x] = player.playerId;
+
+        console.log("player with ID " + player.playerId + " is on position " + "(" + player.x + ", " + player.y + ")");
+    }
+
+    // function that calls all other functions in Board Object
+    this.init = function () {
+        this.gameBoard(board);
+        this.gameBush(board);
+
+        this.gameGun(gun1.id);
+        this.gameGun(gun2.id);
+        this.gameGun(gun3.id);
+
+        this.gamePlayer(player1);
+        this.gamePlayer(player2);
+    }
 }
 
+/*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 // 1.2 - Gun Object
 function Gun(name, id, damage) {
@@ -70,7 +130,8 @@ function Gun(name, id, damage) {
 }
 
 /*-------------------------------------------------------------------*/
-// 1.3 - Player
+/*-------------------------------------------------------------------*/
+// 1.3 - Player Object
 function Player(playerId, hp, activeGun) {
     this.x = 0;
     this.y = 0;
@@ -81,12 +142,15 @@ function Player(playerId, hp, activeGun) {
     this.moveDirection;
 
 
-    this.move = function(direction) {
+    this.move = function (direction) {
 
         switch (direction) {
             case "up":
                 if (this.y - 1 < 0 || board.layout[this.y - 1][this.x] == gameConstant.PLAYER2 || board.layout[this.y - 1][this.x] == gameConstant.PLAYER1 || board.layout[this.y - 1][this.x] == gameConstant.BUSH) {
-                    console.log("This move is not possible!");
+
+                    consoleOutput.innerHTML = "This move is not possible!";
+                    /**/
+
                 } else {
                     this.y = this.y - 1;
                     console.log("Player with ID: " + this.playerId + " Moved from: " + "(" + this.x + ", " + (this.y + 1) + ") to (" + this.x + ", " + this.y + ")");
@@ -96,7 +160,9 @@ function Player(playerId, hp, activeGun) {
 
             case "right":
                 if (this.x + 1 > 9 || board.layout[this.y][this.x + 1] == gameConstant.PLAYER2 || board.layout[this.y][this.x + 1] == gameConstant.PLAYER1 || board.layout[this.y][this.x + 1] == gameConstant.BUSH) {
-                    console.log("This move is not possible!");
+
+                    consoleOutput.innerHTML = "This move is not possible!";
+                    /**/
                 } else {
                     this.x = this.x + 1;
                     console.log("Player with ID: " + this.playerId + " Moved from: " + "(" + (this.x - 1) + ", " + this.y + ") to (" + this.x + ", " + this.y + ")");
@@ -106,7 +172,8 @@ function Player(playerId, hp, activeGun) {
 
             case "down":
                 if (this.y + 1 > 9 || board.layout[this.y + 1][this.x] == gameConstant.PLAYER2 || board.layout[this.y + 1][this.x] == gameConstant.PLAYER1 || board.layout[this.y + 1][this.x] == gameConstant.BUSH) {
-                    console.log("This move is not possible!");
+                    consoleOutput.innerHTML = "This move is not possible!";
+                    /**/
                 } else {
                     this.y = this.y + 1;
                     console.log("Player with ID: " + this.playerId + " Moved from: " + "(" + this.x + ", " + (this.y - 1) + ") to (" + this.x + ", " + this.y + ")");
@@ -116,7 +183,8 @@ function Player(playerId, hp, activeGun) {
 
             case "left":
                 if (this.x - 1 < 0 || board.layout[this.y][this.x - 1] == gameConstant.PLAYER2 || board.layout[this.y][this.x - 1] == gameConstant.PLAYER1 || board.layout[this.y][this.x - 1] == gameConstant.BUSH) {
-                    console.log("This move is not possible!");
+                    consoleOutput.innerHTML = "This move is not possible!";
+
                 } else {
                     this.x = this.x - 1;
                     console.log("Player with ID: " + this.playerId + " Moved from: " + "(" + (this.x + 1) + ", " + this.y + ") to (" + this.x + ", " + this.y + ")");
@@ -130,214 +198,62 @@ function Player(playerId, hp, activeGun) {
     }
 }
 
+
 /*-------------------------------------------------------------------*/
-//1.4 Init Object for generating game
-function Init() {
-
-    // Board method generator 
-    this.gameBoard = function (boardName) {
-        for (i = 0; i < boardName.width; i++) {
-            boardName.layout.push([]);
-
-            for (z = 0; z < boardName.height; z++) {
-                boardName.layout[i][z] = gameConstant.EMPTY;
-            }
-        }
-    }
-
-    //Bush method genetaror
-    this.gameBush = function (boardName) {
-        var bush = Math.floor(Math.random() * (boardName.width * boardName.width * 0.12) + 8);
-
-        for (i = 0; i < bush; i++) {
-            var x = Math.floor(Math.random() * boardName.layout.length);
-            var y = Math.floor(Math.random() * boardName.layout[0].length);
-
-            while (boardName.layout[x][y] == gameConstant.BUSH) {
-                x = Math.floor(Math.random() * boardName.layout.length);
-                y = Math.floor(Math.random() * boardName.layout[0].length);
-            }
-
-            boardName.layout[x][y] = gameConstant.BUSH;
-            console.log("number of bushes generated: " + bush);
-        }
-
-
-    }
-
-
-    //Gun method generator
-    this.gameGun = function (boardName, gunId) {
-        var y = Math.floor(Math.random() * boardName.layout.length);
-        var z = Math.floor(Math.random() * boardName.layout[0].length);
-
-        while (!(boardName.layout[y][z] == gameConstant.EMPTY)) {
-            y = Math.floor(Math.random() * boardName.layout.length);
-            z = Math.floor(Math.random() * boardName.layout[0].length);
-        }
-        boardName.layout[y][z] = gunId;
-    }
-
-    //Player method generator
-    this.gamePlayer = function (boardName, player) {
-        player.x = Math.floor(Math.random() * boardName.layout.length);
-        player.y = Math.floor(Math.random() * boardName.layout[0].length);
-
-        while (!(boardName.layout[player.x][player.y] == gameConstant.EMPTY)) {
-            player.x = Math.floor(Math.random() * boardName.layout.length);
-            player.y = Math.floor(Math.random() * boardName.layout[0].length);
-        }
-
-        boardName.layout[player.y][player.x] = player.playerId;
-
-        console.log("player with ID " + player.playerId + " is on position " + "(" + player.x + ", " + player.y + ")");
-    }
-
-}
-
-
 /*-------------------------------------------------------------------*/
 // 2.0 - Creating objects instances
+//QUESTION: is it possible to create it inside a function and make it global?
 var board = new Board(10, 10);
-var init = new Init();
 
 var gun0 = new Gun("Baloon", gameConstant.GUN_BALOON, gameConstant.LOW_DMG);
 var gun1 = new Gun("Bat", gameConstant.GUN_BAT, gameConstant.MED_DMG);
 var gun2 = new Gun("Ball", gameConstant.GUN_BALL, gameConstant.HIGH_DMG);
 var gun3 = new Gun("Bomb", gameConstant.GUN_BOMB, gameConstant.ULTRA_DMG);
 
-var player1 = new Player(gameConstant.PLAYER1, gameConstant.PLAYER_HP, gun0.id);
-var player2 = new Player(gameConstant.PLAYER2, gameConstant.PLAYER_HP, gun0.id);
+var player1 = new Player(gameConstant.PLAYER1, gameConstant.PLAYER_HP, gun0);
+var player2 = new Player(gameConstant.PLAYER2, gameConstant.PLAYER_HP, gun0);
 var player1Turn = true; //to check whos turn it is
 
-
+/*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 // 3.0 - Start function - starts the game once called
 function start() {
     board.layout = [];
-    init.gameBoard(board);
-    init.gameBush(board);
+    board.init();
 
-    init.gameGun(board, gun1.id);
-    init.gameGun(board, gun2.id);
-    init.gameGun(board, gun3.id);
-
-    init.gamePlayer(board, player1);
-    init.gamePlayer(board, player2);
+    updateBoard();
+    updateDom();
 
     console.log(board.layout);
-
-    //why does this work? I am not sure
-    canvas.width = canvas.width;
-    updateBoard();
-
 }
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-// 4.0 - Creating Canvas
-var canvas = document.querySelector("canvas");
-canvas.width = 800;
-canvas.height = 800;
-
-var c = canvas.getContext("2d");
-
-
-/*-------------------------------------------------------------------*/
-//4.1 - Creating sprites
-var p1 = new Image();
-var p2 = new Image();
-var bushImage = new Image();
-
-
-var w1 = new Image();
-var w2 = new Image();
-var w3 = new Image();
-var w4 = new Image();
-
-p1.src = "assets/p1.png";
-p2.src = "assets/p2.png";
-bushImage.src = "assets/bush.png";
-
-w1.src = "assets/weapon1.png";
-w2.src = "assets/weapon2.png";
-w3.src = "assets/weapon3.png";
-w4.src = "assets/weapon4.png";
-
-
-/*-------------------------------------------------------------------*/
-//4.1 - This function will update the canvas game instance
-function updateBoard() {
-    canvas.width = canvas.width;
-    canvas.height = canvas.height;
-    var xPos = 0;
-    var yPos = 0;
-
-    for (var x = 0; x < board.layout.length; x++) {
-        for (var y = 0; y < board.layout[x].length; y++) {
-
-            c.strokeRect(xPos, yPos, 80, 80);
-
-
-            if (board.layout[x][y] == gameConstant.BUSH) {
-                c.drawImage(bushImage, xPos, yPos);
-            }
-
-            if (board.layout[x][y] == gameConstant.GUN_BALOON) {
-                //create animation here
-                c.drawImage(w1, xPos, yPos);
-            }
-
-            if (board.layout[x][y] == gameConstant.GUN_BAT) {
-                //create animation here
-                c.drawImage(w2, xPos, yPos);
-            }
-
-            if (board.layout[x][y] == gameConstant.GUN_BALL) {
-                c.drawImage(w3, xPos, yPos);
-            }
-
-            if (board.layout[x][y] == gameConstant.GUN_BOMB) {
-                c.drawImage(w4, xPos, yPos);
-            }
-
-            if (board.layout[x][y] == gameConstant.PLAYER1) {
-                c.drawImage(p1, xPos, yPos);
-            }
-
-            if (board.layout[x][y] == gameConstant.PLAYER2) {
-                c.drawImage(p2, xPos, yPos);
-            }
-
-            xPos += 80;
-
-        }
-        xPos = 0;
-        yPos += 80;
-    }
-}
-
-/*-------------------------------------------------------------------*/
-//5.0 - Event listener
+//4.0 - Event listener
 function action(e) {
     var playerMoving;
     if (player1Turn) {
         playerMoving = player1;
+        clearConsole();
     } else {
         playerMoving = player2;
+        clearConsole();
     }
 
     function moveAction(direction){
 
         if (playerMoving.moveDistance >= gameConstant.MAX_MOVE_DISTANCE) {
-            console.log("You cannot move anymore!");
+            consoleOutput.innerHTML = "You cannot move anymore! Only attack or Finish round";
+            /**/
+
         } else if (playerMoving.moveDistance > gameConstant.MIN_MOVE_DISTANCE && direction !== playerMoving.moveDirection) {
-            console.log("You cannot move " + direction + ". You can only move " + playerMoving.moveDirection);
+            consoleOutput.innerHTML = "You cannot move " + direction + ". You can only move " + playerMoving.moveDirection;
+            /**/
+
         } else {
 
             if (playerMoving.gunInventory.length > 1) {
-                board.layout[playerMoving.y][playerMoving.x] = playerMoving.gunInventory[0];
+                board.layout[playerMoving.y][playerMoving.x] = playerMoving.gunInventory[0].id;
                 playerMoving.gunInventory.shift();
             } else {
                 board.layout[playerMoving.y][playerMoving.x] = gameConstant.EMPTY;
@@ -352,8 +268,25 @@ function action(e) {
 
 
             if (mapObject == gameConstant.GUN_BALOON || mapObject == gameConstant.GUN_BAT || mapObject == gameConstant.GUN_BALL || mapObject == gameConstant.GUN_BOMB) {
+
                 gunOnTheMap = mapObject;
-                playerMoving.gunInventory.push(gunOnTheMap);
+
+                switch (gunOnTheMap) {
+                    case gameConstant.GUN_BALOON:
+                        playerMoving.gunInventory.push(gun0);
+                        break;
+                    case gameConstant.GUN_BAT:
+                        playerMoving.gunInventory.push(gun1);
+                        break;
+                    case gameConstant.GUN_BALL:
+                        playerMoving.gunInventory.push(gun2);
+                        break;
+                    case gameConstant.GUN_BOMB:
+                        playerMoving.gunInventory.push(gun3);
+                        break;
+                    default:
+                        console.log("Error while adding weapon/gun object into inventory");
+                }
             }
             //---------------
 
@@ -364,22 +297,26 @@ function action(e) {
         }
     }
 
-    switch(e.keyCode) {
+    switch (e.keyCode) {
 
         case gameConstant.UP_ARROW:
             moveAction("up");
+            updateDom();
             break;
 
         case gameConstant.RIGHT_ARROW:
             moveAction("right");
+            updateDom();
             break;
 
         case gameConstant.DOWN_ARROW:
             moveAction("down");
+            updateDom();
             break;
 
         case gameConstant.LEFT_ARROW:
             moveAction("left");
+            updateDom();
             break;
 
         case gameConstant.Q_KEYBOARD:
@@ -391,6 +328,7 @@ function action(e) {
 
             playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
             console.log("End round - Q key: " + e.keyCode);
+            updateDom();
             break;
 
 
