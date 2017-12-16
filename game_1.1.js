@@ -1,5 +1,6 @@
 /*
 Content:
+0.0 - Game constants
 1.1 - Board constructor 
 1.2 - Gun constructor
 1.3 - Player constructor
@@ -13,10 +14,36 @@ Content:
 */
 
 
+
+/*
+
+var gun0 = new Gun("Baloon", 3, 5);
+var gun1 = new Gun("Bat", 4, 10);
+var gun2 = new Gun("Ball", 5, 20);
+var gun3 = new Gun("Bomb", 6, 30);
+
+var player1 = new Player(8, 100, gun0.id, 0, 0);
+var player2 = new Player(9, 100, gun0.id, 0, 0);
+
+*/
+// 0.0 - Game constants
+var gameConstant = {
+    EMPTY: 0,
+    BUSH: 1,
+    GUN_BALOON: 3,
+    GUN_BAT: 4,
+    GUN_BALL: 5,
+    GUN_BOMB: 6,
+    PLAYER1: 8,
+    PLAYER2:9
+}
+
+
+
 // 1.1 - Board Object
-function Board(a, b) {
-    this.a = a;
-    this.b = b;
+function Board(width, height) {
+    this.width = width;
+    this.height = height;
     this.layout = [];
 
     this.display = function () {
@@ -34,9 +61,9 @@ function Gun(name, id, damage) {
 
 /*-------------------------------------------------------------------*/
 // 1.3 - Player
-function Player(playerId, hp, activeGun, x, y) {
-    this.x = x;
-    this.y = y;
+function Player(playerId, hp, activeGun){
+    this.x = 0;
+    this.y = 0;
     this.playerId = playerId;
     this.hp = hp;
     this.gunInventory = [activeGun];
@@ -48,7 +75,7 @@ function Player(playerId, hp, activeGun, x, y) {
 
         switch (direction) {
             case "up":
-                if (this.y - 1 < 0 || game1.layout[this.y - 1][this.x] == 9 || game1.layout[this.y - 1][this.x] == 8 || game1.layout[this.y - 1][this.x] == 1) {
+                if (this.y - 1 < 0 || game1.layout[this.y - 1][this.x] == gameConstant.PLAYER2 || game1.layout[this.y - 1][this.x] == gameConstant.PLAYER1 || game1.layout[this.y - 1][this.x] == gameConstant.BUSH) {
                     console.log("This move is not possible!");
                 } else {
                     this.y = this.y - 1;
@@ -58,7 +85,7 @@ function Player(playerId, hp, activeGun, x, y) {
                 break;
 
             case "right":
-                if (this.x + 1 > 9 || game1.layout[this.y][this.x + 1] == 9 || game1.layout[this.y][this.x + 1] == 8 || game1.layout[this.y][this.x + 1] == 1) {
+                if (this.x + 1 > 9 || game1.layout[this.y][this.x + 1] == gameConstant.PLAYER2 || game1.layout[this.y][this.x + 1] == gameConstant.PLAYER1 || game1.layout[this.y][this.x + 1] == gameConstant.BUSH) {
                     console.log("This move is not possible!");
                 } else {
                     this.x = this.x + 1;
@@ -68,7 +95,7 @@ function Player(playerId, hp, activeGun, x, y) {
                 break;
 
             case "down":
-                if (this.y + 1 > 9 || game1.layout[this.y + 1][this.x] == 9 || game1.layout[this.y + 1][this.x] == 8 || game1.layout[this.y + 1][this.x] == 1) {
+                if (this.y + 1 > 9 || game1.layout[this.y + 1][this.x] == gameConstant.PLAYER2 || game1.layout[this.y + 1][this.x] == gameConstant.PLAYER1 || game1.layout[this.y + 1][this.x] == gameConstant.BUSH) {
                     console.log("This move is not possible!");
                 } else {
                     this.y = this.y + 1;
@@ -78,7 +105,7 @@ function Player(playerId, hp, activeGun, x, y) {
                 break;
 
             case "left":
-                if (this.x - 1 < 0 || game1.layout[this.y][this.x - 1] == 9 || game1.layout[this.y][this.x - 1] == 8 || game1.layout[this.y][this.x - 1] == 1) {
+                if (this.x - 1 < 0 || game1.layout[this.y][this.x - 1] == gameConstant.PLAYER2 || game1.layout[this.y][this.x - 1] == gameConstant.PLAYER1 || game1.layout[this.y][this.x - 1] == gameConstant.BUSH) {
                     console.log("This move is not possible!");
                 } else {
                     this.x = this.x - 1;
@@ -95,22 +122,22 @@ function Player(playerId, hp, activeGun, x, y) {
 
 /*-------------------------------------------------------------------*/
 //1.4 Init Object for generating game
-function Init() {
+function Init(){
 
     // Board method generator 
-    this.gameBoard = function (boardName) {
-        for (i = 0; i < boardName.a; i++) {
+    this.gameBoard = function (boardName){
+        for (i = 0; i < boardName.width; i++) {
             boardName.layout.push([]);
 
-            for (z = 0; z < boardName.b; z++) {
-                boardName.layout[i][z] = 0;
+            for (z = 0; z < boardName.height; z++) {
+                boardName.layout[i][z] = gameConstant.EMPTY;
             }
         }
     }
 
     //Bush method genetaror
     this.gameBush = function (boardName) {
-        var bush = Math.floor(Math.random() * (boardName.a * boardName.a * 0.12) + 8);
+        var bush = Math.floor(Math.random() * (boardName.width * boardName.width * 0.12) + 8);
 
         for (i = 0; i < bush; i++) {
             var x = Math.floor(Math.random() * boardName.layout.length);
@@ -121,7 +148,7 @@ function Init() {
                 y = Math.floor(Math.random() * boardName.layout[0].length);
             }
 
-            boardName.layout[x][y] = 1;
+            boardName.layout[x][y] = gameConstant.BUSH;
             console.log("number of bushes generated: " + bush);
         }
 
@@ -134,7 +161,7 @@ function Init() {
         var y = Math.floor(Math.random() * boardName.layout.length);
         var z = Math.floor(Math.random() * boardName.layout[0].length);
 
-        while (!(boardName.layout[y][z] == "0")) {
+        while (!(boardName.layout[y][z] == gameConstant.EMPTY)) {
             y = Math.floor(Math.random() * boardName.layout.length);
             z = Math.floor(Math.random() * boardName.layout[0].length);
         }
@@ -146,7 +173,7 @@ function Init() {
         player.x = Math.floor(Math.random() * boardName.layout.length);
         player.y = Math.floor(Math.random() * boardName.layout[0].length);
 
-        while (!(boardName.layout[player.x][player.y] == "0")) {
+        while (!(boardName.layout[player.x][player.y] == gameConstant.EMPTY)) {
             player.x = Math.floor(Math.random() * boardName.layout.length);
             player.y = Math.floor(Math.random() * boardName.layout[0].length);
         }
@@ -169,8 +196,8 @@ var gun1 = new Gun("Bat", 4, 10);
 var gun2 = new Gun("Ball", 5, 20);
 var gun3 = new Gun("Bomb", 6, 30);
 
-var player1 = new Player(8, 100, gun0.id, 0, 0);
-var player2 = new Player(9, 100, gun0.id, 0, 0);
+var player1 = new Player(8, 100, gun0.id);
+var player2 = new Player(9, 100, gun0.id);
 var player1Turn = true; //to check whos turn it is
 
 
