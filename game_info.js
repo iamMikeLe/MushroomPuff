@@ -2,7 +2,6 @@
 1.0 - Creating Canvas
 2.0 - Creating sprites
 3.0 - This function will update the canvas game instance(refresh canvas)
-4.0 - creating var and assigning dom elements to it
 5.0 - This function updates DOM elements once called (colors, text)
 6.0 - This function will clear the game console section element
 */
@@ -100,35 +99,21 @@ function updateBoard() {
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
-//4.0 - creating var and assigning dom elements to it
-    var p1_hp = $("#p1_hp");
-    var p1_weapon = $("#p1_weapon");
-    var p1_damage = $("#p1_damage");
-    var p1_movement = $("#p1_movement");
-
-    var p2_hp = $("#p2_hp");
-    var p1_weapon = $("#p2_weapon");
-    var p1_damage = $("#p2_damage");
-    var p1_movement = $("#p2_movement");
-
-    var consoleOutput = $("#consoleOutput");
 
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 //5.0 - This function updates DOM elements once called (colors, text)
 function updateDom() {
-    p1_hp.innerHTML = player1.hp;
-    p1_weapon.innerHTML = player1.gunInventory[0].name;
-    p1_damage.innerHTML = player1.gunInventory[0].damage;
-    p1_movement.innerHTML = 3 - player1.moveDistance;
+    $("#p1_hp").html(player1.hp);
+    $("#p1_weapon").html(player1.gunInventory[0].name);
+    $("#p1_damage").html(player1.gunInventory[0].damage);
+    $("#p1_movement").html(3 - player1.moveDistance);
 
-    p2_hp.innerHTML = player2.hp;
-    p2_weapon.innerHTML = player2.gunInventory[0].name;
-    p2_damage.innerHTML = player2.gunInventory[0].damage;
-    p2_movement.innerHTML = 3 - player2.moveDistance;
-
-
+    $("#p2_hp").html(player2.hp);
+    $("#p2_weapon").html(player2.gunInventory[0].name);
+    $("#p2_damage").html(player2.gunInventory[0].damage);
+    $("#p2_movement").html(3 - player2.moveDistance);
 
 
     if (player1Turn) {
@@ -136,14 +121,15 @@ function updateDom() {
         $(".player2").css("background-color", "white");
 
         /*Why is JQuery not working for selecting p1_turn?*/
-        document.getElementById("p1_turn").innerHTML = "Player1: <span style=\"color: red;\">It's my turn!</span>";
-        document.getElementById("p2_turn").innerHTML = "Player2";
-
+        $("#p1_turn").html("Player1: <span style=\"color: red;\">It's my turn!</span>");
+        $("#p2_turn").html("Player2");
     } else {
+        $("#p2_turn").html("Player2: <span style=\"color: red;\">It's my turn!</span>");
+        $("#p1_turn").html("Player1");
+
         $(".player1").css("background-color", "white");
         $(".player2").css("background-color", "#adf37f");
-        document.getElementById("p2_turn").innerHTML = "Player2: <span style=\"color: red;\">It's my turn!</span>";;
-        document.getElementById("p1_turn").innerHTML = "Player1";
+
 
     }
 
@@ -155,6 +141,6 @@ function updateDom() {
 //6.0 - This function will clear the game console section element
 function clearConsole() {
     setTimeout(function () {
-        consoleOutput.innerHTML = "---";
+        $("#consoleOutput").html("---");
     }, 5000);
 }
