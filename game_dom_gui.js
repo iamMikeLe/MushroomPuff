@@ -2,6 +2,8 @@
 1.0 - Creating Canvas
 2.0 - Creating sprites
 3.0 - This function will update the canvas game instance(refresh canvas)
+3.1 This function calculates players possible movements
+3.2 This function draws possible moves once called
 5.0 - This function updates DOM elements once called (colors, text)
 6.0 - This function will clear the game console section element
 */
@@ -95,22 +97,58 @@ function updateBoard() {
 
 }
 
-function possibleMoves() {
-    //calculate players possible movements
-    var i1 = 1;
 
-    while (i1 < 4 && board.layout[player1.y + i1][player1.x] != gameConstant.BUSH && board.layout[player1.y + i1][player1.x] != gameConstant.PLAYER2) {
-        c.drawImage(p_possible_move, player1.x * 80, (player1.y + i1) * 80);
+ // 3.1 This function calculates players possible movements
+function possibleMoves(playerTrue, playerFalse) {
+
+    var i1 = 1;
+    while (!(playerTrue.y + i1 >9) && i1 < 4 && board.layout[playerTrue.y + i1][playerTrue.x] != gameConstant.BUSH && board.layout[playerTrue.y + i1][playerTrue.x] != playerFalse) {
+
+        c.drawImage(p_possible_move, playerTrue.x * 80, (playerTrue.y + i1) * 80);
         i1++;
+
     }
 
+    var i2 = 1;
+    while (!(playerTrue.y - i2 < 0) && i2 < 4 && board.layout[playerTrue.y - i2][playerTrue.x] != gameConstant.BUSH && board.layout[playerTrue.y - i2][playerTrue.x] != playerFalse) {
+
+        c.drawImage(p_possible_move, playerTrue.x * 80, (playerTrue.y - i2) * 80);
+        i2++;
+    }
+
+
+    var i3 = 1;
+    while (!(playerTrue.x - i3 < 0) && i3 < 4 && board.layout[playerTrue.y][playerTrue.x - i3] != gameConstant.BUSH && board.layout[playerTrue.y][playerTrue.x - i3] != playerFalse) {
+
+        c.drawImage(p_possible_move, ((playerTrue.x- i3) * 80), playerTrue.y * 80);
+        i3++;
+    }
+
+
+    var i4 = 1;
+    while (!(playerTrue.x + i4 < 0) && i4 < 4 && board.layout[playerTrue.y][playerTrue.x + i4] != gameConstant.BUSH && board.layout[playerTrue.y][playerTrue.x + i4] != playerFalse) {
+
+        c.drawImage(p_possible_move, ((playerTrue.x + i4) * 80), playerTrue.y * 80);
+        i4++;
+    }
 }
+
+
+ // 3.2 This function draws possible moves once called
+function drawPossibleMoves(){
+     if (player1Turn) {
+                player1Turn = false;
+                 possibleMoves(player2, gameConstant.PLAYER1);
+            } else {
+                player1Turn = true;
+                 possibleMoves(player1, gameConstant.PLAYER2);
+            }
+}
+
 /*---------------------------------------------------------------*/
 /*-----------------------DOM Manipulation------------------------*/
 /*---------------------------------------------------------------*/
 
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
 
 
 /*-------------------------------------------------------------------*/

@@ -227,6 +227,7 @@ function start() {
 
     updateBoard();
     updateDom();
+    possibleMoves(player1, gameConstant.PLAYER2);
 
     console.log(board.layout);
 }
@@ -324,16 +325,12 @@ function action(e) {
             break;
 
         case gameConstant.Q_KEYBOARD:
-            if (player1Turn) {
-                player1Turn = false;
-            } else {
-                player1Turn = true;
-            }
-
+            updateBoard();
+            drawPossibleMoves();
             playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
             console.log("End round - Q key: " + e.keyCode);
             updateDom();
-            possibleMoves();
+
             break;
 
 
