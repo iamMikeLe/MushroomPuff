@@ -2,6 +2,8 @@
 1.0 - Creating Canvas
 2.0 - Creating sprites
 3.0 - This function will update the canvas game instance(refresh canvas)
+3.1 This function calculates players possible movements
+3.2 This function draws possible moves once called
 5.0 - This function updates DOM elements once called (colors, text)
 6.0 - This function will clear the game console section element
 */
@@ -23,6 +25,7 @@ var c = canvas.getContext("2d");
 var p1 = new Image();
 var p2 = new Image();
 var bushImage = new Image();
+var p_possible_move = new Image();
 
 
 var w1 = new Image();
@@ -33,6 +36,7 @@ var w4 = new Image();
 p1.src = "assets/p1.png";
 p2.src = "assets/p2.png";
 bushImage.src = "assets/bush.png";
+p_possible_move.src = "assets/square_move.png";
 
 w1.src = "assets/weapon1.png";
 w2.src = "assets/weapon2.png";
@@ -86,19 +90,65 @@ function updateBoard() {
             }
 
             xPos += 80;
-
         }
         xPos = 0;
         yPos += 80;
     }
+
+}
+
+
+ // 3.1 This function calculates players possible movements
+function possibleMoves(playerTrue, playerFalse) {
+
+    var i1 = 1;
+    while (!(playerTrue.y + i1 >9) && i1 < 4 && board.layout[playerTrue.y + i1][playerTrue.x] != gameConstant.BUSH && board.layout[playerTrue.y + i1][playerTrue.x] != playerFalse) {
+
+        c.drawImage(p_possible_move, playerTrue.x * 80, (playerTrue.y + i1) * 80);
+        i1++;
+
+    }
+
+    var i2 = 1;
+    while (!(playerTrue.y - i2 < 0) && i2 < 4 && board.layout[playerTrue.y - i2][playerTrue.x] != gameConstant.BUSH && board.layout[playerTrue.y - i2][playerTrue.x] != playerFalse) {
+
+        c.drawImage(p_possible_move, playerTrue.x * 80, (playerTrue.y - i2) * 80);
+        i2++;
+    }
+
+
+    var i3 = 1;
+    while (!(playerTrue.x - i3 < 0) && i3 < 4 && board.layout[playerTrue.y][playerTrue.x - i3] != gameConstant.BUSH && board.layout[playerTrue.y][playerTrue.x - i3] != playerFalse) {
+
+        c.drawImage(p_possible_move, ((playerTrue.x- i3) * 80), playerTrue.y * 80);
+        i3++;
+    }
+
+
+    var i4 = 1;
+    while (!(playerTrue.x + i4 < 0) && i4 < 4 && board.layout[playerTrue.y][playerTrue.x + i4] != gameConstant.BUSH && board.layout[playerTrue.y][playerTrue.x + i4] != playerFalse) {
+
+        c.drawImage(p_possible_move, ((playerTrue.x + i4) * 80), playerTrue.y * 80);
+        i4++;
+    }
+}
+
+
+ // 3.2 This function draws possible moves once called
+function drawPossibleMoves(){
+     if (player1Turn) {
+                player1Turn = false;
+                 possibleMoves(player2, gameConstant.PLAYER1);
+            } else {
+                player1Turn = true;
+                 possibleMoves(player1, gameConstant.PLAYER2);
+            }
 }
 
 /*---------------------------------------------------------------*/
 /*-----------------------DOM Manipulation------------------------*/
 /*---------------------------------------------------------------*/
 
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
 
 
 /*-------------------------------------------------------------------*/
