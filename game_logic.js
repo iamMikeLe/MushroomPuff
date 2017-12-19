@@ -48,8 +48,8 @@ function Board(width, height) {
 
 
     // Board method generator - generates empty space
-    this.gameBoard = function () {
-        for (i = 0; i < this.width; i++) {
+    this.gameBoard = function(){
+        for (i = 0; i < this.width; i++){
             this.layout.push([]);
 
             for (z = 0; z < this.height; z++) {
@@ -74,8 +74,6 @@ function Board(width, height) {
             this.layout[x][y] = gameConstant.BUSH;
             console.log("number of bushes generated: " + bush);
         }
-
-
     }
 
 
@@ -108,8 +106,8 @@ function Board(width, height) {
 
     // function that calls all other functions in Board Object
     this.init = function () {
-        this.gameBoard(board);
-        this.gameBush(board);
+        this.gameBoard();
+        this.gameBush();
 
         this.gameGun(gun1.id);
         this.gameGun(gun2.id);
@@ -221,7 +219,7 @@ var player1Turn = true; //to check whos turn it is
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 // 3.0 - Start function - starts the game once called
-function start() {
+function start(){
     board.layout = [];
     board.init();
 

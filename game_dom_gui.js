@@ -192,5 +192,5 @@ function updateDom() {
 function clearConsole() {
     setTimeout(function () {
         $("#consoleOutput").html("---");
-    }, 5000);
+    }, 10000);
 }
