@@ -48,8 +48,8 @@ function Board(width, height) {
 
 
     // Board method generator - generates empty space
-    this.gameBoard = function(){
-        for (i = 0; i < this.width; i++){
+    this.gameBoard = function () {
+        for (i = 0; i < this.width; i++) {
             this.layout.push([]);
 
             for (z = 0; z < this.height; z++) {
@@ -204,22 +204,43 @@ function Player(playerId, hp, activeGun) {
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 // 2.0 - Creating objects instances
-//QUESTION: is it possible to create it inside a function and make it global?
-var board = new Board(10, 10);
 
-var gun0 = new Gun("Baloon", gameConstant.GUN_BALOON, gameConstant.LOW_DMG);
-var gun1 = new Gun("Bat", gameConstant.GUN_BAT, gameConstant.MED_DMG);
-var gun2 = new Gun("Ball", gameConstant.GUN_BALL, gameConstant.HIGH_DMG);
-var gun3 = new Gun("Bomb", gameConstant.GUN_BOMB, gameConstant.ULTRA_DMG);
 
-var player1 = new Player(gameConstant.PLAYER1, gameConstant.PLAYER_HP, gun0);
-var player2 = new Player(gameConstant.PLAYER2, gameConstant.PLAYER_HP, gun0);
-var player1Turn = true; //to check whos turn it is
+
+
+/*-------------------------------------------------------------------*/
+/*-------------------------------------------------------------------*/
+// 2.1 - Game object - inicialize a new game
+
+var Game = function () {
+    var board;
+
+    var gun0;
+    var gun1;
+    var gun2;
+    var gun3;
+
+    var player1;
+    var player2;
+    var player1Turn;
+}
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 // 3.0 - Start function - starts the game once called
-function start(){
+function start() {
+    board = new Board(10, 10);
+
+    gun0 = new Gun("Baloon", gameConstant.GUN_BALOON, gameConstant.LOW_DMG);
+    gun1 = new Gun("Bat", gameConstant.GUN_BAT, gameConstant.MED_DMG);
+    gun2 = new Gun("Ball", gameConstant.GUN_BALL, gameConstant.HIGH_DMG);
+    gun3 = new Gun("Bomb", gameConstant.GUN_BOMB, gameConstant.ULTRA_DMG);
+
+    player1 = new Player(gameConstant.PLAYER1, gameConstant.PLAYER_HP, gun0);
+    player2 = new Player(gameConstant.PLAYER2, gameConstant.PLAYER_HP, gun0);
+    player1Turn = true; //to check whos turn it is
+
+
     board.layout = [];
     board.init();
 
