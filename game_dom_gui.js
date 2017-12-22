@@ -53,39 +53,39 @@ function updateBoard() {
     var xPos = 0;
     var yPos = 0;
 
-    for (var x = 0; x < board.layout.length; x++) {
-        for (var y = 0; y < board.layout[x].length; y++) {
+    for (var x = 0; x < game.board.layout.length; x++) {
+        for (var y = 0; y < game.board.layout[x].length; y++) {
 
             c.strokeRect(xPos, yPos, 80, 80);
 
 
-            if (board.layout[x][y] == gameConstant.BUSH) {
+            if (game.board.layout[x][y] == gameConstant.BUSH) {
                 c.drawImage(bushImage, xPos, yPos);
             }
 
-            if (board.layout[x][y] == gameConstant.GUN_BALOON) {
+            if (game.board.layout[x][y] == gameConstant.GUN_BALOON) {
                 //create animation here
                 c.drawImage(w1, xPos, yPos);
             }
 
-            if (board.layout[x][y] == gameConstant.GUN_BAT) {
+            if (game.board.layout[x][y] == gameConstant.GUN_BAT) {
                 //create animation here
                 c.drawImage(w2, xPos, yPos);
             }
 
-            if (board.layout[x][y] == gameConstant.GUN_BALL) {
+            if (game.board.layout[x][y] == gameConstant.GUN_BALL) {
                 c.drawImage(w3, xPos, yPos);
             }
 
-            if (board.layout[x][y] == gameConstant.GUN_BOMB) {
+            if (game.board.layout[x][y] == gameConstant.GUN_BOMB) {
                 c.drawImage(w4, xPos, yPos);
             }
 
-            if (board.layout[x][y] == gameConstant.PLAYER1) {
+            if (game.board.layout[x][y] == gameConstant.PLAYER1) {
                 c.drawImage(p1, xPos, yPos);
             }
 
-            if (board.layout[x][y] == gameConstant.PLAYER2) {
+            if (game.board.layout[x][y] == gameConstant.PLAYER2) {
                 c.drawImage(p2, xPos, yPos);
             }
 
@@ -102,7 +102,7 @@ function updateBoard() {
 function possibleMoves(playerTrue, playerFalse) {
 
     var i1 = 1;
-    while (!(playerTrue.y + i1 >9) && i1 < 4 && board.layout[playerTrue.y + i1][playerTrue.x] != gameConstant.BUSH && board.layout[playerTrue.y + i1][playerTrue.x] != playerFalse) {
+    while (!(playerTrue.y + i1 >9) && i1 < 4 && game.board.layout[playerTrue.y + i1][playerTrue.x] != gameConstant.BUSH && game.board.layout[playerTrue.y + i1][playerTrue.x] != playerFalse) {
 
         c.drawImage(p_possible_move, playerTrue.x * 80, (playerTrue.y + i1) * 80);
         i1++;
@@ -110,7 +110,7 @@ function possibleMoves(playerTrue, playerFalse) {
     }
 
     var i2 = 1;
-    while (!(playerTrue.y - i2 < 0) && i2 < 4 && board.layout[playerTrue.y - i2][playerTrue.x] != gameConstant.BUSH && board.layout[playerTrue.y - i2][playerTrue.x] != playerFalse) {
+    while (!(playerTrue.y - i2 < 0) && i2 < 4 && game.board.layout[playerTrue.y - i2][playerTrue.x] != gameConstant.BUSH && game.board.layout[playerTrue.y - i2][playerTrue.x] != playerFalse) {
 
         c.drawImage(p_possible_move, playerTrue.x * 80, (playerTrue.y - i2) * 80);
         i2++;
@@ -118,7 +118,7 @@ function possibleMoves(playerTrue, playerFalse) {
 
 
     var i3 = 1;
-    while (!(playerTrue.x - i3 < 0) && i3 < 4 && board.layout[playerTrue.y][playerTrue.x - i3] != gameConstant.BUSH && board.layout[playerTrue.y][playerTrue.x - i3] != playerFalse) {
+    while (!(playerTrue.x - i3 < 0) && i3 < 4 && game.board.layout[playerTrue.y][playerTrue.x - i3] != gameConstant.BUSH && game.board.layout[playerTrue.y][playerTrue.x - i3] != playerFalse) {
 
         c.drawImage(p_possible_move, ((playerTrue.x- i3) * 80), playerTrue.y * 80);
         i3++;
@@ -126,7 +126,7 @@ function possibleMoves(playerTrue, playerFalse) {
 
 
     var i4 = 1;
-    while (!(playerTrue.x + i4 < 0) && i4 < 4 && board.layout[playerTrue.y][playerTrue.x + i4] != gameConstant.BUSH && board.layout[playerTrue.y][playerTrue.x + i4] != playerFalse) {
+    while (!(playerTrue.x + i4 < 0) && i4 < 4 && game.board.layout[playerTrue.y][playerTrue.x + i4] != gameConstant.BUSH && game.board.layout[playerTrue.y][playerTrue.x + i4] != playerFalse) {
 
         c.drawImage(p_possible_move, ((playerTrue.x + i4) * 80), playerTrue.y * 80);
         i4++;
@@ -136,12 +136,12 @@ function possibleMoves(playerTrue, playerFalse) {
 
  // 3.2 This function draws possible moves once called
 function drawPossibleMoves(){
-     if (player1Turn) {
-                player1Turn = false;
-                 possibleMoves(player2, gameConstant.PLAYER1);
+     if (game.player1Turn) {
+                game.player1Turn = false;
+                 possibleMoves(game.player2, gameConstant.PLAYER1);
             } else {
-                player1Turn = true;
-                 possibleMoves(player1, gameConstant.PLAYER2);
+                game.player1Turn = true;
+                 possibleMoves(game.player1, gameConstant.PLAYER2);
             }
 }
 
@@ -155,18 +155,18 @@ function drawPossibleMoves(){
 /*-------------------------------------------------------------------*/
 //5.0 - This function updates DOM elements once called (colors, text)
 function updateDom() {
-    $("#p1_hp").html(player1.hp);
-    $("#p1_weapon").html(player1.gunInventory[0].name);
-    $("#p1_damage").html(player1.gunInventory[0].damage);
-    $("#p1_movement").html(3 - player1.moveDistance);
+    $("#p1_hp").html(game.player1.hp);
+    $("#p1_weapon").html(game.player1.gunInventory[0].name);
+    $("#p1_damage").html(game.player1.gunInventory[0].damage);
+    $("#p1_movement").html(3 - game.player1.moveDistance);
 
-    $("#p2_hp").html(player2.hp);
-    $("#p2_weapon").html(player2.gunInventory[0].name);
-    $("#p2_damage").html(player2.gunInventory[0].damage);
-    $("#p2_movement").html(3 - player2.moveDistance);
+    $("#p2_hp").html(game.player2.hp);
+    $("#p2_weapon").html(game.player2.gunInventory[0].name);
+    $("#p2_damage").html(game.player2.gunInventory[0].damage);
+    $("#p2_movement").html(3 - game.player2.moveDistance);
 
 
-    if (player1Turn) {
+    if (game.player1Turn) {
         $(".player1").css("background-color", "#adf37f");
         $(".player2").css("background-color", "white");
 

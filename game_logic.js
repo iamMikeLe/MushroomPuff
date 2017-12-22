@@ -109,12 +109,12 @@ function Board(width, height) {
         this.gameBoard();
         this.gameBush();
 
-        this.gameGun(gun1.id);
-        this.gameGun(gun2.id);
-        this.gameGun(gun3.id);
+        this.gameGun(game.gun1.id);
+        this.gameGun(game.gun2.id);
+        this.gameGun(game.gun3.id);
 
-        this.gamePlayer(player1);
-        this.gamePlayer(player2);
+        this.gamePlayer(game.player1);
+        this.gamePlayer(game.player2);
     }
 }
 
@@ -148,7 +148,7 @@ function Player(playerId, hp, activeGun) {
 
         switch (direction) {
             case "up":
-                if (this.y - 1 < 0 || board.layout[this.y - 1][this.x] == gameConstant.PLAYER2 || board.layout[this.y - 1][this.x] == gameConstant.PLAYER1 || board.layout[this.y - 1][this.x] == gameConstant.BUSH) {
+                if (this.y - 1 < 0 || game.board.layout[this.y - 1][this.x] == gameConstant.PLAYER2 || game.board.layout[this.y - 1][this.x] == gameConstant.PLAYER1 || game.board.layout[this.y - 1][this.x] == gameConstant.BUSH) {
 
                     consoleOutput.innerHTML = "This move is not possible!";
                     /**/
@@ -161,7 +161,7 @@ function Player(playerId, hp, activeGun) {
                 break;
 
             case "right":
-                if (this.x + 1 > 9 || board.layout[this.y][this.x + 1] == gameConstant.PLAYER2 || board.layout[this.y][this.x + 1] == gameConstant.PLAYER1 || board.layout[this.y][this.x + 1] == gameConstant.BUSH) {
+                if (this.x + 1 > 9 || game.board.layout[this.y][this.x + 1] == gameConstant.PLAYER2 || game.board.layout[this.y][this.x + 1] == gameConstant.PLAYER1 || game.board.layout[this.y][this.x + 1] == gameConstant.BUSH) {
 
                     consoleOutput.innerHTML = "This move is not possible!";
                     /**/
@@ -173,7 +173,7 @@ function Player(playerId, hp, activeGun) {
                 break;
 
             case "down":
-                if (this.y + 1 > 9 || board.layout[this.y + 1][this.x] == gameConstant.PLAYER2 || board.layout[this.y + 1][this.x] == gameConstant.PLAYER1 || board.layout[this.y + 1][this.x] == gameConstant.BUSH) {
+                if (this.y + 1 > 9 || game.board.layout[this.y + 1][this.x] == gameConstant.PLAYER2 || game.board.layout[this.y + 1][this.x] == gameConstant.PLAYER1 || game.board.layout[this.y + 1][this.x] == gameConstant.BUSH) {
                     consoleOutput.innerHTML = "This move is not possible!";
                     /**/
                 } else {
@@ -184,7 +184,7 @@ function Player(playerId, hp, activeGun) {
                 break;
 
             case "left":
-                if (this.x - 1 < 0 || board.layout[this.y][this.x - 1] == gameConstant.PLAYER2 || board.layout[this.y][this.x - 1] == gameConstant.PLAYER1 || board.layout[this.y][this.x - 1] == gameConstant.BUSH) {
+                if (this.x - 1 < 0 || game.board.layout[this.y][this.x - 1] == gameConstant.PLAYER2 || game.board.layout[this.y][this.x - 1] == gameConstant.PLAYER1 || game.board.layout[this.y][this.x - 1] == gameConstant.BUSH) {
                     consoleOutput.innerHTML = "This move is not possible!";
 
                 } else {
@@ -213,54 +213,47 @@ function Player(playerId, hp, activeGun) {
 // 2.1 - Game object - inicialize a new game
 
 var Game = function () {
-    var board;
 
-    var gun0;
-    var gun1;
-    var gun2;
-    var gun3;
 
-    var player1;
-    var player2;
-    var player1Turn;
+    this.start = function () {
+
+        this.board = new Board(10, 10);
+
+        this.gun0 = new Gun("Baloon", gameConstant.GUN_BALOON, gameConstant.LOW_DMG);
+        this.gun1 = new Gun("Bat", gameConstant.GUN_BAT, gameConstant.MED_DMG);
+        this.gun2 = new Gun("Ball", gameConstant.GUN_BALL, gameConstant.HIGH_DMG);
+        this.gun3 = new Gun("Bomb", gameConstant.GUN_BOMB, gameConstant.ULTRA_DMG);
+
+        this.player1 = new Player(gameConstant.PLAYER1, gameConstant.PLAYER_HP, this.gun0);
+        this.player2 = new Player(gameConstant.PLAYER2, gameConstant.PLAYER_HP, this.gun0);
+        this.player1Turn = true; //to check whos turn it is
+
+
+        this.board.layout = [];
+        this.board.init();
+
+        updateBoard();
+        updateDom();
+        possibleMoves(game.player1, gameConstant.PLAYER2);
+
+        console.log(game.board.layout);
+    }
 }
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 // 3.0 - Start function - starts the game once called
-function start() {
-    board = new Board(10, 10);
-
-    gun0 = new Gun("Baloon", gameConstant.GUN_BALOON, gameConstant.LOW_DMG);
-    gun1 = new Gun("Bat", gameConstant.GUN_BAT, gameConstant.MED_DMG);
-    gun2 = new Gun("Ball", gameConstant.GUN_BALL, gameConstant.HIGH_DMG);
-    gun3 = new Gun("Bomb", gameConstant.GUN_BOMB, gameConstant.ULTRA_DMG);
-
-    player1 = new Player(gameConstant.PLAYER1, gameConstant.PLAYER_HP, gun0);
-    player2 = new Player(gameConstant.PLAYER2, gameConstant.PLAYER_HP, gun0);
-    player1Turn = true; //to check whos turn it is
-
-
-    board.layout = [];
-    board.init();
-
-    updateBoard();
-    updateDom();
-    possibleMoves(player1, gameConstant.PLAYER2);
-
-    console.log(board.layout);
-}
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 //4.0 - Event listener
 function action(e) {
     var playerMoving;
-    if (player1Turn) {
-        playerMoving = player1;
+    if (game.player1Turn) {
+        playerMoving = game.player1;
         clearConsole();
     } else {
-        playerMoving = player2;
+        playerMoving = game.player2;
         clearConsole();
     }
 
@@ -277,10 +270,10 @@ function action(e) {
         } else {
 
             if (playerMoving.gunInventory.length > 1) {
-                board.layout[playerMoving.y][playerMoving.x] = playerMoving.gunInventory[0].id;
+                game.board.layout[playerMoving.y][playerMoving.x] = playerMoving.gunInventory[0].id;
                 playerMoving.gunInventory.shift();
             } else {
-                board.layout[playerMoving.y][playerMoving.x] = gameConstant.EMPTY;
+                game.board.layout[playerMoving.y][playerMoving.x] = gameConstant.EMPTY;
             }
 
             playerMoving.move(direction);
@@ -288,7 +281,7 @@ function action(e) {
             //---------------
             // this will add gun into inventory if player cross one
             var gunOnTheMap;
-            var mapObject = board.layout[playerMoving.y][playerMoving.x];
+            var mapObject = game.board.layout[playerMoving.y][playerMoving.x];
 
 
             if (mapObject == gameConstant.GUN_BALOON || mapObject == gameConstant.GUN_BAT || mapObject == gameConstant.GUN_BALL || mapObject == gameConstant.GUN_BOMB) {
@@ -297,16 +290,16 @@ function action(e) {
 
                 switch (gunOnTheMap) {
                     case gameConstant.GUN_BALOON:
-                        playerMoving.gunInventory.push(gun0);
+                        playerMoving.gunInventory.push(game.gun0);
                         break;
                     case gameConstant.GUN_BAT:
-                        playerMoving.gunInventory.push(gun1);
+                        playerMoving.gunInventory.push(game.gun1);
                         break;
                     case gameConstant.GUN_BALL:
-                        playerMoving.gunInventory.push(gun2);
+                        playerMoving.gunInventory.push(game.gun2);
                         break;
                     case gameConstant.GUN_BOMB:
-                        playerMoving.gunInventory.push(gun3);
+                        playerMoving.gunInventory.push(game.gun3);
                         break;
                     default:
                         console.log("Error while adding weapon/gun object into inventory");
@@ -314,7 +307,7 @@ function action(e) {
             }
             //---------------
 
-            board.layout[playerMoving.y][playerMoving.x] = playerMoving.playerId;
+            game.board.layout[playerMoving.y][playerMoving.x] = playerMoving.playerId;
             updateBoard();
             console.log(direction + " arrow: " + e.keyCode);
             playerMoving.moveDirection = direction;
@@ -367,4 +360,6 @@ function action(e) {
 
 }
 
+
+var game = new Game();
 document.onkeydown = action;
