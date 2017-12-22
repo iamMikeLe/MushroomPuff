@@ -238,128 +238,129 @@ var Game = function () {
 
         console.log(game.board.layout);
     }
-}
 
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-// 3.0 - Start function - starts the game once called
 
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-//4.0 - Event listener
-function action(e) {
-    var playerMoving;
-    if (game.player1Turn) {
-        playerMoving = game.player1;
-        clearConsole();
-    } else {
-        playerMoving = game.player2;
-        clearConsole();
-    }
+    /*-------------------------------------------------------------------*/
+    /*-------------------------------------------------------------------*/
+    // 3.0 - Start function - starts the game once called
 
-    function moveAction(direction) {
+    /*-------------------------------------------------------------------*/
+    /*-------------------------------------------------------------------*/
+    //4.0 - Event listener
 
-        if (playerMoving.moveDistance >= gameConstant.MAX_MOVE_DISTANCE) {
-            consoleOutput.innerHTML = "You cannot move anymore! Only attack or Finish round";
-            /**/
-
-        } else if (playerMoving.moveDistance > gameConstant.MIN_MOVE_DISTANCE && direction !== playerMoving.moveDirection) {
-            consoleOutput.innerHTML = "You cannot move " + direction + ". You can only move " + playerMoving.moveDirection;
-            /**/
-
+    this.action = function (e) {
+        var playerMoving;
+        if (game.player1Turn) {
+            playerMoving = game.player1;
+            clearConsole();
         } else {
-
-            if (playerMoving.gunInventory.length > 1) {
-                game.board.layout[playerMoving.y][playerMoving.x] = playerMoving.gunInventory[0].id;
-                playerMoving.gunInventory.shift();
-            } else {
-                game.board.layout[playerMoving.y][playerMoving.x] = gameConstant.EMPTY;
-            }
-
-            playerMoving.move(direction);
-
-            //---------------
-            // this will add gun into inventory if player cross one
-            var gunOnTheMap;
-            var mapObject = game.board.layout[playerMoving.y][playerMoving.x];
-
-
-            if (mapObject == gameConstant.GUN_BALOON || mapObject == gameConstant.GUN_BAT || mapObject == gameConstant.GUN_BALL || mapObject == gameConstant.GUN_BOMB) {
-
-                gunOnTheMap = mapObject;
-
-                switch (gunOnTheMap) {
-                    case gameConstant.GUN_BALOON:
-                        playerMoving.gunInventory.push(game.gun0);
-                        break;
-                    case gameConstant.GUN_BAT:
-                        playerMoving.gunInventory.push(game.gun1);
-                        break;
-                    case gameConstant.GUN_BALL:
-                        playerMoving.gunInventory.push(game.gun2);
-                        break;
-                    case gameConstant.GUN_BOMB:
-                        playerMoving.gunInventory.push(game.gun3);
-                        break;
-                    default:
-                        console.log("Error while adding weapon/gun object into inventory");
-                }
-            }
-            //---------------
-
-            game.board.layout[playerMoving.y][playerMoving.x] = playerMoving.playerId;
-            updateBoard();
-            console.log(direction + " arrow: " + e.keyCode);
-            playerMoving.moveDirection = direction;
+            playerMoving = game.player2;
+            clearConsole();
         }
+
+        function moveAction(direction) {
+
+            if (playerMoving.moveDistance >= gameConstant.MAX_MOVE_DISTANCE) {
+                consoleOutput.innerHTML = "You cannot move anymore! Only attack or Finish round";
+                /**/
+
+            } else if (playerMoving.moveDistance > gameConstant.MIN_MOVE_DISTANCE && direction !== playerMoving.moveDirection) {
+                consoleOutput.innerHTML = "You cannot move " + direction + ". You can only move " + playerMoving.moveDirection;
+                /**/
+
+            } else {
+
+                if (playerMoving.gunInventory.length > 1) {
+                    game.board.layout[playerMoving.y][playerMoving.x] = playerMoving.gunInventory[0].id;
+                    playerMoving.gunInventory.shift();
+                } else {
+                    game.board.layout[playerMoving.y][playerMoving.x] = gameConstant.EMPTY;
+                }
+
+                playerMoving.move(direction);
+
+                //---------------
+                // this will add gun into inventory if player cross one
+                var gunOnTheMap;
+                var mapObject = game.board.layout[playerMoving.y][playerMoving.x];
+
+
+                if (mapObject == gameConstant.GUN_BALOON || mapObject == gameConstant.GUN_BAT || mapObject == gameConstant.GUN_BALL || mapObject == gameConstant.GUN_BOMB) {
+
+                    gunOnTheMap = mapObject;
+
+                    switch (gunOnTheMap) {
+                        case gameConstant.GUN_BALOON:
+                            playerMoving.gunInventory.push(game.gun0);
+                            break;
+                        case gameConstant.GUN_BAT:
+                            playerMoving.gunInventory.push(game.gun1);
+                            break;
+                        case gameConstant.GUN_BALL:
+                            playerMoving.gunInventory.push(game.gun2);
+                            break;
+                        case gameConstant.GUN_BOMB:
+                            playerMoving.gunInventory.push(game.gun3);
+                            break;
+                        default:
+                            console.log("Error while adding weapon/gun object into inventory");
+                    }
+                }
+                //---------------
+
+                game.board.layout[playerMoving.y][playerMoving.x] = playerMoving.playerId;
+                updateBoard();
+                console.log(direction + " arrow: " + e.keyCode);
+                playerMoving.moveDirection = direction;
+            }
+        }
+
+        switch (e.keyCode) {
+
+            case gameConstant.UP_ARROW:
+                moveAction("up");
+                updateDom();
+                break;
+
+            case gameConstant.RIGHT_ARROW:
+                moveAction("right");
+                updateDom();
+                break;
+
+            case gameConstant.DOWN_ARROW:
+                moveAction("down");
+                updateDom();
+                break;
+
+            case gameConstant.LEFT_ARROW:
+                moveAction("left");
+                updateDom();
+                break;
+
+            case gameConstant.Q_KEYBOARD:
+                updateBoard();
+                drawPossibleMoves();
+                playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
+                console.log("End round - Q key: " + e.keyCode);
+                updateDom();
+
+                break;
+
+
+
+
+            default:
+                console.log(e.keyCode);
+        }
+
+        //    c.clearRect(0, 0, canvas.width, canvas.height);
+        //     canvas.width = canvas.width;
+        //     canvas.height = canvas.height;
+
+
+
     }
-
-    switch (e.keyCode) {
-
-        case gameConstant.UP_ARROW:
-            moveAction("up");
-            updateDom();
-            break;
-
-        case gameConstant.RIGHT_ARROW:
-            moveAction("right");
-            updateDom();
-            break;
-
-        case gameConstant.DOWN_ARROW:
-            moveAction("down");
-            updateDom();
-            break;
-
-        case gameConstant.LEFT_ARROW:
-            moveAction("left");
-            updateDom();
-            break;
-
-        case gameConstant.Q_KEYBOARD:
-            updateBoard();
-            drawPossibleMoves();
-            playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
-            console.log("End round - Q key: " + e.keyCode);
-            updateDom();
-
-            break;
-
-
-
-
-        default:
-            console.log(e.keyCode);
-    }
-
-    //    c.clearRect(0, 0, canvas.width, canvas.height);
-    //     canvas.width = canvas.width;
-    //     canvas.height = canvas.height;
-
-
-
 }
-
 
 var game = new Game();
-document.onkeydown = action;
+document.onkeydown = game.action;
