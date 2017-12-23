@@ -150,7 +150,8 @@ function Player(playerId, hp, activeGun) {
             case "up":
                 if (this.y - 1 < 0 || game.board.layout[this.y - 1][this.x] == gameConstant.PLAYER2 || game.board.layout[this.y - 1][this.x] == gameConstant.PLAYER1 || game.board.layout[this.y - 1][this.x] == gameConstant.BUSH) {
 
-                    consoleOutput.innerHTML = "This move is not possible!";
+                    game.moveLog++;
+                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.moveLog + ": This move is not possible!";
                     /**/
 
                 } else {
@@ -163,7 +164,8 @@ function Player(playerId, hp, activeGun) {
             case "right":
                 if (this.x + 1 > 9 || game.board.layout[this.y][this.x + 1] == gameConstant.PLAYER2 || game.board.layout[this.y][this.x + 1] == gameConstant.PLAYER1 || game.board.layout[this.y][this.x + 1] == gameConstant.BUSH) {
 
-                    consoleOutput.innerHTML = "This move is not possible!";
+                    game.moveLog++;
+                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.moveLog + ": This move is not possible!";
                     /**/
                 } else {
                     this.x = this.x + 1;
@@ -174,7 +176,8 @@ function Player(playerId, hp, activeGun) {
 
             case "down":
                 if (this.y + 1 > 9 || game.board.layout[this.y + 1][this.x] == gameConstant.PLAYER2 || game.board.layout[this.y + 1][this.x] == gameConstant.PLAYER1 || game.board.layout[this.y + 1][this.x] == gameConstant.BUSH) {
-                    consoleOutput.innerHTML = "This move is not possible!";
+                     game.moveLog++;
+                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.moveLog + ": This move is not possible!";
                     /**/
                 } else {
                     this.y = this.y + 1;
@@ -185,7 +188,8 @@ function Player(playerId, hp, activeGun) {
 
             case "left":
                 if (this.x - 1 < 0 || game.board.layout[this.y][this.x - 1] == gameConstant.PLAYER2 || game.board.layout[this.y][this.x - 1] == gameConstant.PLAYER1 || game.board.layout[this.y][this.x - 1] == gameConstant.BUSH) {
-                    consoleOutput.innerHTML = "This move is not possible!";
+                     game.moveLog++;
+                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.moveLog + ": This move is not possible!";
 
                 } else {
                     this.x = this.x - 1;
@@ -215,8 +219,11 @@ function Player(playerId, hp, activeGun) {
 var Game = function () {
 
 
-    this.start = function () {
+    this.moveLog; //for tracking the game move number
 
+    this.start = function () {
+        this.moveLog = 0;
+        clearConsole();
         this.board = new Board(10, 10);
 
         this.gun0 = new Gun("Baloon", gameConstant.GUN_BALOON, gameConstant.LOW_DMG);
@@ -252,20 +259,22 @@ var Game = function () {
         var playerMoving;
         if (game.player1Turn) {
             playerMoving = game.player1;
-            clearConsole();
+
         } else {
             playerMoving = game.player2;
-            clearConsole();
+
         }
 
         function moveAction(direction) {
 
             if (playerMoving.moveDistance >= gameConstant.MAX_MOVE_DISTANCE) {
-                consoleOutput.innerHTML = "You cannot move anymore! Only attack or Finish round";
+                game.moveLog++;
+                consoleOutput.innerHTML += "<br> -----" + "<br>" + game.moveLog + ": You cannot move anymore! Only attack or Finish round";
                 /**/
 
             } else if (playerMoving.moveDistance > gameConstant.MIN_MOVE_DISTANCE && direction !== playerMoving.moveDirection) {
-                consoleOutput.innerHTML = "You cannot move " + direction + ". You can only move " + playerMoving.moveDirection;
+                game.moveLog++;
+                consoleOutput.innerHTML += "<br> -----" + "<br>" + game.moveLog + ": You cannot move " + direction + ". You can only move " + playerMoving.moveDirection;
                 /**/
 
             } else {
@@ -343,7 +352,6 @@ var Game = function () {
                 playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
                 console.log("End round - Q key: " + e.keyCode);
                 updateDom();
-
                 break;
 
 

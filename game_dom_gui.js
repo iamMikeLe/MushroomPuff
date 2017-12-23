@@ -98,11 +98,11 @@ function updateBoard() {
 }
 
 
- // 3.1 This function calculates players possible movements
+// 3.1 This function calculates players possible movements
 function possibleMoves(playerTrue, playerFalse) {
 
     var i1 = 1;
-    while (!(playerTrue.y + i1 >9) && i1 < 4 && game.board.layout[playerTrue.y + i1][playerTrue.x] != gameConstant.BUSH && game.board.layout[playerTrue.y + i1][playerTrue.x] != playerFalse) {
+    while (!(playerTrue.y + i1 > 9) && i1 < 4 && game.board.layout[playerTrue.y + i1][playerTrue.x] != gameConstant.BUSH && game.board.layout[playerTrue.y + i1][playerTrue.x] != playerFalse) {
 
         c.drawImage(p_possible_move, playerTrue.x * 80, (playerTrue.y + i1) * 80);
         i1++;
@@ -120,7 +120,7 @@ function possibleMoves(playerTrue, playerFalse) {
     var i3 = 1;
     while (!(playerTrue.x - i3 < 0) && i3 < 4 && game.board.layout[playerTrue.y][playerTrue.x - i3] != gameConstant.BUSH && game.board.layout[playerTrue.y][playerTrue.x - i3] != playerFalse) {
 
-        c.drawImage(p_possible_move, ((playerTrue.x- i3) * 80), playerTrue.y * 80);
+        c.drawImage(p_possible_move, ((playerTrue.x - i3) * 80), playerTrue.y * 80);
         i3++;
     }
 
@@ -134,15 +134,15 @@ function possibleMoves(playerTrue, playerFalse) {
 }
 
 
- // 3.2 This function draws possible moves once called
-function drawPossibleMoves(){
-     if (game.player1Turn) {
-                game.player1Turn = false;
-                 possibleMoves(game.player2, gameConstant.PLAYER1);
-            } else {
-                game.player1Turn = true;
-                 possibleMoves(game.player1, gameConstant.PLAYER2);
-            }
+// 3.2 This function draws possible moves once called
+function drawPossibleMoves() {
+    if (game.player1Turn) {
+        game.player1Turn = false;
+        possibleMoves(game.player2, gameConstant.PLAYER1);
+    } else {
+        game.player1Turn = true;
+        possibleMoves(game.player1, gameConstant.PLAYER2);
+    }
 }
 
 /*---------------------------------------------------------------*/
@@ -182,15 +182,20 @@ function updateDom() {
 
 
     }
-
-    clearConsole();
+    outputScrollDown();
 }
+    /*-------------------------------------------------------------------*/
+    /*-------------------------------------------------------------------*/
+    //6.0 - This function will clear the game console section element
+    function clearConsole() {
 
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-//6.0 - This function will clear the game console section element
-function clearConsole() {
-    setTimeout(function () {
-        $("#consoleOutput").html("---");
-    }, 10000);
-}
+        $("#consoleOutput").html("");
+
+    }
+
+//this function help us keep the newly appended p child in view
+    function outputScrollDown() {
+        $('#consoleOutput').stop().animate({
+            scrollTop: $('#consoleOutput')[0].scrollHeight
+        }, 800);
+    }
