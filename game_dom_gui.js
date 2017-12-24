@@ -95,6 +95,23 @@ function updateBoard() {
         yPos += 80;
     }
 
+    if (game.gameOn == false) {
+        var finalText;
+
+        if (game.player1.hp <= 0) {
+            finalText = "Player2 Won!";
+        } else {
+            finalText = "Player1 Won!";
+        }
+
+        c.clearRect(0, 0, canvas.width, canvas.height);
+        c.font = "30px Comic Sans MS";
+        c.fillStyle = "red";
+        c.textAlign = "center";
+
+
+        c.fillText(finalText, canvas.width / 2, canvas.height / 2);
+    }
 }
 
 
@@ -225,6 +242,20 @@ function updateDom() {
 function clearConsole() {
 
     $("#consoleOutput").html("");
+
+}
+
+function clearDom() {
+    $("#p1_hp").html("");
+    $("#p1_weapon").html("");
+    $("#p1_damage").html("");
+    $("#p1_movement").html("");
+
+
+    $("#p2_hp").html("");
+    $("#p2_weapon").html("");
+    $("#p2_damage").html("");
+    $("#p2_movement").html("");
 
 }
 

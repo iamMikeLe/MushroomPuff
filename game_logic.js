@@ -210,20 +210,30 @@ function Player(playerId, hp, activeGun) {
     this.attack = function (enemy) {
 
 
-        if ((enemy.x == this.x + 1 && enemy.y == this.y) || (enemy.x == this.x - 1 && enemy.y == this.y) || (enemy.y == this.y + 1 && enemy.x == this.x)|| (enemy.y == this.y - 1 && enemy.x == this.x)) {
-            enemy.hp = enemy.hp - this.gunInventory[0].damage;
-            this.canAttack = false;
-            updateDom();
-        } else {
+        if (this.canAttack) {
+            if ((enemy.x == this.x + 1 && enemy.y == this.y) || (enemy.x == this.x - 1 && enemy.y == this.y) || (enemy.y == this.y + 1 && enemy.x == this.x) || (enemy.y == this.y - 1 && enemy.x == this.x)) {
+                enemy.hp = enemy.hp - this.gunInventory[0].damage;
+                this.canAttack = false;
+                updateDom();
+            } else {
 
+                game.logNumber++;
+                consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": You need to move closer to attack!";
+            }
+
+        } else {
             game.logNumber++;
-            consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": Cannot attack,  you already did or need to move closer!";
+            consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": You can attack only once per turn!";
         }
+
 
 
 
         if (this.hp <= 0 || enemy.hp <= 0) {
             console.log("Game Ended");
+            game.gameOn = false;
+            updateBoard();
+            clearDom();
         }
     }
 
@@ -247,11 +257,12 @@ function Player(playerId, hp, activeGun) {
 
 var Game = function () {
 
-
+    this.gameOn;
     this.logNumber; //for tracking the game move number
 
     this.start = function () {
         this.logNumber = 0;
+        this.gameOn = true;
         clearConsole();
         this.board = new Board(10, 10);
 
@@ -285,6 +296,7 @@ var Game = function () {
     //4.0 - Event listener
 
     this.action = function (e) {
+
         var playerMoving;
         if (game.player1Turn) {
             playerMoving = game.player1;
@@ -353,74 +365,77 @@ var Game = function () {
             }
         }
 
-        switch (e.keyCode) {
+        if (game.gameOn) {
+            switch (e.keyCode) {
 
-            case gameConstant.UP_ARROW:
-                moveAction("up");
-                updateDom();
-                break;
+                case gameConstant.UP_ARROW:
+                    moveAction("up");
+                    updateDom();
+                    break;
 
-            case gameConstant.RIGHT_ARROW:
-                moveAction("right");
-                updateDom();
-                break;
+                case gameConstant.RIGHT_ARROW:
+                    moveAction("right");
+                    updateDom();
+                    break;
 
-            case gameConstant.DOWN_ARROW:
-                moveAction("down");
-                updateDom();
-                break;
+                case gameConstant.DOWN_ARROW:
+                    moveAction("down");
+                    updateDom();
+                    break;
 
-            case gameConstant.LEFT_ARROW:
-                moveAction("left");
-                updateDom();
-                break;
+                case gameConstant.LEFT_ARROW:
+                    moveAction("left");
+                    updateDom();
+                    break;
 
-            case gameConstant.Q_KEYBOARD:
-                updateBoard();
-                drawPossibleMoves_EndRound();
-                playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
-                console.log("End round - Q key: " + e.keyCode);
-                updateDom();
-                break;
+                case gameConstant.Q_KEYBOARD:
+                    updateBoard();
+                    drawPossibleMoves_EndRound();
+                    playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
+                    console.log("End round - Q key: " + e.keyCode);
+                    updateDom();
+                    break;
 
-            case gameConstant.A_KEYBOARD:
-                console.log("Attack - A key: " + e.keyCode);
+                case gameConstant.A_KEYBOARD:
+                    console.log("Attack - A key: " + e.keyCode);
 
-                if (game.player1Turn) {
-                    game.player1.attack(game.player2);
+                    if (game.player1Turn) {
+                        game.player1.attack(game.player2);
 
-                } else {
-                    game.player2.attack(game.player1);
+                    } else {
+                        game.player2.attack(game.player1);
 
-                }
+                    }
 
-                updateDom();
-                break;
+                    updateDom();
+                    break;
 
-            case gameConstant.D_KEYBOARD:
+                case gameConstant.D_KEYBOARD:
 
-                if (game.player1Turn) {
-                    game.player1.switchDefenseMode();
-                } else {
-                    game.player2.switchDefenseMode();
-                }
-                console.log("Defense - D key: " + e.keyCode);
-                updateDom();
-                break;
+                    if (game.player1Turn) {
+                        game.player1.switchDefenseMode();
+                    } else {
+                        game.player2.switchDefenseMode();
+                    }
+                    console.log("Defense - D key: " + e.keyCode);
+                    updateDom();
+                    break;
 
 
 
-            default:
-                console.log(e.keyCode);
+                default:
+                    console.log(e.keyCode);
+            }
+        } else {
+            consoleOutput.innerHTML = "You need to start new game first!";
         }
-
         //    c.clearRect(0, 0, canvas.width, canvas.height);
         //     canvas.width = canvas.width;
         //     canvas.height = canvas.height;
 
 
-
     }
+
 }
 
 var game = new Game();
