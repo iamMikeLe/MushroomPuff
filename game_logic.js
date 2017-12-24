@@ -207,12 +207,34 @@ function Player(playerId, hp, activeGun) {
         }
     }
 
-    this.attack = function (enemy) {
+    this.attack = function (enemy){
 
 
         if (this.canAttack) {
             if ((enemy.x == this.x + 1 && enemy.y == this.y) || (enemy.x == this.x - 1 && enemy.y == this.y) || (enemy.y == this.y + 1 && enemy.x == this.x) || (enemy.y == this.y - 1 && enemy.x == this.x)) {
-                enemy.hp = enemy.hp - this.gunInventory[0].damage;
+
+
+                var dodgeChange = Math.round(Math.random());
+
+                if (dodgeChange == 1) {
+                    game.logNumber++;
+                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": You attacked enemy but missed!";
+                } else {
+                    if (enemy.defendMode) {
+                        enemy.hp = enemy.hp - this.gunInventory[0].damage / 2;
+
+                        game.logNumber++;
+                        consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": You attacked enemy and dealt: " + this.gunInventory[0].damage / 2 + " damage!";
+                    } else {
+                        enemy.hp = enemy.hp - this.gunInventory[0].damage;
+                        this.hp = this.hp - enemy.gunInventory[0].damage;
+
+                        game.logNumber++;
+                        consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": You attacked enemy and dealt: " + this.gunInventory[0].damage + " damage! and received " + enemy.gunInventory[0].damage + " damage from his attack mode!";
+                    }
+                }
+
+
                 this.canAttack = false;
                 updateDom();
             } else {
