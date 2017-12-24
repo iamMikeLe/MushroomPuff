@@ -34,7 +34,9 @@ var gameConstant = {
     RIGHT_ARROW: 39,
     DOWN_ARROW: 40,
     LEFT_ARROW: 37,
-    Q_KEYBOARD: 81
+    Q_KEYBOARD: 81,
+    A_KEYBOARD: 65,
+    D_KEYBOARD: 68
 }
 
 
@@ -138,6 +140,8 @@ function Player(playerId, hp, activeGun) {
     this.gunInventory = [activeGun];
     this.moveDistance = 0;
     this.moveDirection;
+    this.defendMode = true;
+    this.canAttack = true;
 
 
     this.getPos = function () {
@@ -150,8 +154,8 @@ function Player(playerId, hp, activeGun) {
             case "up":
                 if (this.y - 1 < 0 || game.board.layout[this.y - 1][this.x] == gameConstant.PLAYER2 || game.board.layout[this.y - 1][this.x] == gameConstant.PLAYER1 || game.board.layout[this.y - 1][this.x] == gameConstant.BUSH) {
 
-                    game.moveLog++;
-                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.moveLog + ": This move is not possible!";
+                    game.logNumber++;
+                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": This move is not possible!";
                     /**/
 
                 } else {
@@ -164,8 +168,8 @@ function Player(playerId, hp, activeGun) {
             case "right":
                 if (this.x + 1 > 9 || game.board.layout[this.y][this.x + 1] == gameConstant.PLAYER2 || game.board.layout[this.y][this.x + 1] == gameConstant.PLAYER1 || game.board.layout[this.y][this.x + 1] == gameConstant.BUSH) {
 
-                    game.moveLog++;
-                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.moveLog + ": This move is not possible!";
+                    game.logNumber++;
+                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": This move is not possible!";
                     /**/
                 } else {
                     this.x = this.x + 1;
@@ -176,8 +180,8 @@ function Player(playerId, hp, activeGun) {
 
             case "down":
                 if (this.y + 1 > 9 || game.board.layout[this.y + 1][this.x] == gameConstant.PLAYER2 || game.board.layout[this.y + 1][this.x] == gameConstant.PLAYER1 || game.board.layout[this.y + 1][this.x] == gameConstant.BUSH) {
-                     game.moveLog++;
-                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.moveLog + ": This move is not possible!";
+                    game.logNumber++;
+                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": This move is not possible!";
                     /**/
                 } else {
                     this.y = this.y + 1;
@@ -188,8 +192,8 @@ function Player(playerId, hp, activeGun) {
 
             case "left":
                 if (this.x - 1 < 0 || game.board.layout[this.y][this.x - 1] == gameConstant.PLAYER2 || game.board.layout[this.y][this.x - 1] == gameConstant.PLAYER1 || game.board.layout[this.y][this.x - 1] == gameConstant.BUSH) {
-                     game.moveLog++;
-                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.moveLog + ": This move is not possible!";
+                    game.logNumber++;
+                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": This move is not possible!";
 
                 } else {
                     this.x = this.x - 1;
@@ -202,6 +206,31 @@ function Player(playerId, hp, activeGun) {
                 console.log("unknown expression");
         }
     }
+
+    this.attack = function (enemy) {
+
+
+        if ((enemy.x == this.x + 1 && enemy.y == this.y) || (enemy.x == this.x - 1 && enemy.y == this.y) || (enemy.y == this.y + 1 && enemy.x == this.x)|| (enemy.y == this.y - 1 && enemy.x == this.x)) {
+            enemy.hp = enemy.hp - this.gunInventory[0].damage;
+            this.canAttack = false;
+            updateDom();
+        } else {
+
+            game.logNumber++;
+            consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": Cannot attack,  you already did or need to move closer!";
+        }
+
+
+
+        if (this.hp <= 0 || enemy.hp <= 0) {
+            console.log("Game Ended");
+        }
+    }
+
+    this.switchDefenseMode = function () {
+        this.defendMode = !this.defendMode;
+    }
+
 }
 
 
@@ -219,10 +248,10 @@ function Player(playerId, hp, activeGun) {
 var Game = function () {
 
 
-    this.moveLog; //for tracking the game move number
+    this.logNumber; //for tracking the game move number
 
     this.start = function () {
-        this.moveLog = 0;
+        this.logNumber = 0;
         clearConsole();
         this.board = new Board(10, 10);
 
@@ -268,13 +297,13 @@ var Game = function () {
         function moveAction(direction) {
 
             if (playerMoving.moveDistance >= gameConstant.MAX_MOVE_DISTANCE) {
-                game.moveLog++;
-                consoleOutput.innerHTML += "<br> -----" + "<br>" + game.moveLog + ": You cannot move anymore! Only attack or Finish round";
+                game.logNumber++;
+                consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": You cannot move anymore! Only attack or Finish round";
                 /**/
 
             } else if (playerMoving.moveDistance > gameConstant.MIN_MOVE_DISTANCE && direction !== playerMoving.moveDirection) {
-                game.moveLog++;
-                consoleOutput.innerHTML += "<br> -----" + "<br>" + game.moveLog + ": You cannot move " + direction + ". You can only move " + playerMoving.moveDirection;
+                game.logNumber++;
+                consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": You cannot move " + direction + ". You can only move " + playerMoving.moveDirection;
                 /**/
 
             } else {
@@ -348,12 +377,36 @@ var Game = function () {
 
             case gameConstant.Q_KEYBOARD:
                 updateBoard();
-                drawPossibleMoves();
+                drawPossibleMoves_EndRound();
                 playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
                 console.log("End round - Q key: " + e.keyCode);
                 updateDom();
                 break;
 
+            case gameConstant.A_KEYBOARD:
+                console.log("Attack - A key: " + e.keyCode);
+
+                if (game.player1Turn) {
+                    game.player1.attack(game.player2);
+
+                } else {
+                    game.player2.attack(game.player1);
+
+                }
+
+                updateDom();
+                break;
+
+            case gameConstant.D_KEYBOARD:
+
+                if (game.player1Turn) {
+                    game.player1.switchDefenseMode();
+                } else {
+                    game.player2.switchDefenseMode();
+                }
+                console.log("Defense - D key: " + e.keyCode);
+                updateDom();
+                break;
 
 
 

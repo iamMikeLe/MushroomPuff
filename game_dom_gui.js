@@ -134,13 +134,15 @@ function possibleMoves(playerTrue, playerFalse) {
 }
 
 
-// 3.2 This function draws possible moves once called
-function drawPossibleMoves() {
+// 3.2 This function draws possible moves once called and switch player moves
+function drawPossibleMoves_EndRound() {
     if (game.player1Turn) {
         game.player1Turn = false;
+        game.player1.canAttack = true;
         possibleMoves(game.player2, gameConstant.PLAYER1);
     } else {
         game.player1Turn = true;
+        game.player2.canAttack = true;
         possibleMoves(game.player1, gameConstant.PLAYER2);
     }
 }
@@ -160,10 +162,43 @@ function updateDom() {
     $("#p1_damage").html(game.player1.gunInventory[0].damage);
     $("#p1_movement").html(3 - game.player1.moveDistance);
 
+
     $("#p2_hp").html(game.player2.hp);
     $("#p2_weapon").html(game.player2.gunInventory[0].name);
     $("#p2_damage").html(game.player2.gunInventory[0].damage);
     $("#p2_movement").html(3 - game.player2.moveDistance);
+
+
+
+    if (game.player1.canAttack) {
+        $("#p1_attack").html("Yes");
+    }
+    if (game.player1.canAttack == false) {
+        $("#p1_attack").html("No");
+    }
+
+    if (game.player2.canAttack) {
+        $("#p2_attack").html("Yes");
+    }
+    if (game.player2.canAttack == false) {
+        $("#p2_attack").html("No");
+    }
+
+
+    if (game.player1.defendMode) {
+        $("#p1_defendMode").html("Defend Mode");
+    }
+    if (game.player1.defendMode == false) {
+        $("#p1_defendMode").html("Attack Mode");
+    }
+
+    if (game.player2.defendMode) {
+        $("#p2_defendMode").html("Defend Mode");
+    }
+    if (game.player2.defendMode == false) {
+        $("#p2_defendMode").html("Attack Mode");
+    }
+
 
 
     if (game.player1Turn) {
@@ -184,18 +219,18 @@ function updateDom() {
     }
     outputScrollDown();
 }
-    /*-------------------------------------------------------------------*/
-    /*-------------------------------------------------------------------*/
-    //6.0 - This function will clear the game console section element
-    function clearConsole() {
+/*-------------------------------------------------------------------*/
+/*-------------------------------------------------------------------*/
+//6.0 - This function will clear the game console section element
+function clearConsole() {
 
-        $("#consoleOutput").html("");
+    $("#consoleOutput").html("");
 
-    }
+}
 
 //this function help us keep the newly appended p child in view
-    function outputScrollDown() {
-        $('#consoleOutput').stop().animate({
-            scrollTop: $('#consoleOutput')[0].scrollHeight
-        }, 800);
-    }
+function outputScrollDown() {
+    $('#consoleOutput').stop().animate({
+        scrollTop: $('#consoleOutput')[0].scrollHeight
+    }, 800);
+}

@@ -103,3 +103,12 @@
 									   color-stop(0.72, rgb(73,125,189)),
 									   color-stop(0.86, rgb(28,58,148)));
 }
+
+#p1_defendMode, #p2_defendMode{
+    color:red;
+}
+
+#p1_attack, #p2_attack{
+    color: purple;
+    font-weight: 800;
+}

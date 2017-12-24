@@ -32,17 +32,19 @@
 
         <div class="player_info">
             <div class="player1">
-               <img src="assets/p1.png" alt="Player1">
+<!--                <img src="assets/p1_small.png" alt="Player1">-->
                 <h3 id="p1_turn">Player1</h3>
                 <ul>
                     <li><strong>HP:</strong> <span id="p1_hp"></span></li>
                     <li><strong>Weapon:</strong> <span id="p1_weapon"></span></li>
                     <li><strong>Damage:</strong> <span id="p1_damage"></span></li>
                     <li><strong>Movement(s) left:</strong> <span id="p1_movement"></span></li>
+                    <li><strong>Can Attack:</strong> <span id="p1_attack"></span></li>
+                    <li><strong><span id="p1_defendMode"></span></strong></li>
                 </ul>
             </div>
             <div class="player2">
-               <img src="assets/p2.png" alt="Player1">
+<!--                <img src="assets/p2_small.png" alt="Player1">-->
                 <h3 id="p2_turn">Player2</h3>
 
                 <ul>
@@ -50,12 +52,14 @@
                     <li><strong>Weapon:</strong> <span id="p2_weapon"></span></li>
                     <li><strong>Damage:</strong> <span id="p2_damage"></span></li>
                     <li><strong>Movement(s) left:</strong> <span id="p2_movement"></span></li>
+                    <li><strong>Can Attack:</strong> <span id="p2_attack"></span></li>
+                    <li><strong><span id="p2_defendMode"></span></strong></li>
                 </ul>
             </div>
 
         </div>
-<div class="start_section">
-           <button onclick="game.start();">Start</button>
+        <div class="start_section">
+            <button onclick="game.start();">New Game</button>
         </div>
 
 
