@@ -3,11 +3,24 @@
      background-image: url("assets/background.png")
  }
 
+
+
+h3{
+    margin:0;
+}
+
  #game_container,
  .game_info,
+
+ .start_section,
  .player1,
  .player2 {
      float: left;
+ }
+
+ #game_info {
+     max-height: 802px;
+     overflow: scroll;
  }
 
  .game_console,
@@ -17,12 +30,19 @@
  .rules {
      border: 1px solid black;
      padding: 15px;
+
  }
 
  .rules,
  .start_section,
  .game_console {
      width: 400px;
+ }
+
+ .rules {
+     overflow: scroll;
+     max-height: 260px;
+     overflow-x: hidden;
  }
 
  .game_console {
@@ -32,14 +52,16 @@
  .start_section {
      text-align: center;
      padding-bottom: 0;
+     padding-top: 0;
+     margin: 0;
  }
 
- .start_section button {
-     padding: 5px 15px;
-     margin: 15px;
-     background-color: #0283cb;
+button {
+     padding: 22px 181px;
+     margin: 0;
+     background-color: #63b215;
      color: white;
-     border-color: #0283cb;
+     border-color: #559f0d;
 
 
  }
@@ -75,40 +97,47 @@
  #consoleOutput {
      color: firebrick;
      font-weight: 800;
-      overflow: scroll;
+     overflow: scroll;
      overflow-x: hidden;
      height: 120px;
  }
 
-#consoleOutput::-webkit-scrollbar-track
-{
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	background-color: #F5F5F5;
-	border-radius: 10px;
-}
+ #consoleOutput::-webkit-scrollbar-track,
+ .rules::-webkit-scrollbar-track {
+     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+     background-color: #F5F5F5;
+     border-radius: 10px;
+ }
 
-#consoleOutput::-webkit-scrollbar
-{
-	width: 10px;
-	background-color: #F5F5F5;
-}
+ #consoleOutput::-webkit-scrollbar,
+ .rules::-webkit-scrollbar {
+     width: 10px;
+     background-color: #F5F5F5;
+ }
 
-#consoleOutput::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	background-image: -webkit-gradient(linear,
-									   left bottom,
-									   left top,
-									   color-stop(0.44, rgb(122,153,217)),
-									   color-stop(0.72, rgb(73,125,189)),
-									   color-stop(0.86, rgb(28,58,148)));
-}
+ #consoleOutput::-webkit-scrollbar-thumb,
+ .rules::-webkit-scrollbar-thumb {
+     border-radius: 10px;
+     background-image: -webkit-gradient(linear,
+     left bottom,
+     left top,
+     color-stop(0.44, rgb(122, 153, 217)),
+     color-stop(0.72, rgb(73, 125, 189)),
+     color-stop(0.86, rgb(28, 58, 148)));
+ }
 
-#p1_defendMode, #p2_defendMode{
-    color:red;
-}
+ #p1_defendMode,
+ #p2_defendMode {
+     color: red;
+ }
 
-#p1_attack, #p2_attack{
-    color: purple;
-    font-weight: 800;
-}
+ #p1_attack,
+ #p2_attack {
+     color: purple;
+     font-weight: 800;
+ }
+
+ #p1_turn,
+ #p2_turn {
+     margin-top: 0;
+ }
