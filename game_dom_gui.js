@@ -233,17 +233,17 @@ function updateDom() {
 
 
     if (game.player1.defendMode) {
-        $("#p1_defendMode").html("Defend Mode");
+        $("#p1_defendMode").html("ON");
     }
     if (game.player1.defendMode == false) {
-        $("#p1_defendMode").html("Attack Mode");
+        $("#p1_defendMode").html("OFF");
     }
 
     if (game.player2.defendMode) {
-        $("#p2_defendMode").html("Defend Mode");
+        $("#p2_defendMode").html("ON");
     }
     if (game.player2.defendMode == false) {
-        $("#p2_defendMode").html("Attack Mode");
+        $("#p2_defendMode").html("OFF");
     }
 
 

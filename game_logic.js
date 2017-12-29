@@ -166,7 +166,7 @@ function Player(playerId, hp, activeGun) {
 
             case "right":
                 if (this.x + 1 > 9 || game.board.layout[this.y][this.x + 1] == gameConstant.PLAYER2 || game.board.layout[this.y][this.x + 1] == gameConstant.PLAYER1 || game.board.layout[this.y][this.x + 1] == gameConstant.BUSH) {
-                     game.gameConsole.write("This move is not possible!");
+                    game.gameConsole.write("This move is not possible!");
 
                     /**/
                 } else {
@@ -178,7 +178,7 @@ function Player(playerId, hp, activeGun) {
 
             case "down":
                 if (this.y + 1 > 9 || game.board.layout[this.y + 1][this.x] == gameConstant.PLAYER2 || game.board.layout[this.y + 1][this.x] == gameConstant.PLAYER1 || game.board.layout[this.y + 1][this.x] == gameConstant.BUSH) {
-                     game.gameConsole.write("This move is not possible!");
+                    game.gameConsole.write("This move is not possible!");
 
                     /**/
                 } else {
@@ -214,17 +214,17 @@ function Player(playerId, hp, activeGun) {
                 var dodgeChange = Math.round(Math.random());
 
                 if (dodgeChange == 1) {
-                     game.gameConsole.write("You attacked enemy but missed!");
+                    game.gameConsole.write("You attacked enemy but missed!");
 
                 } else {
                     if (enemy.defendMode) {
                         enemy.hp = enemy.hp - this.gunInventory[0].damage / 2;
-                          game.gameConsole.write("You attacked enemy and dealt: " + this.gunInventory[0].damage / 2 + " damage!");
+                        game.gameConsole.write("You attacked enemy and dealt: " + this.gunInventory[0].damage / 2 + " damage!");
 
                     } else {
                         enemy.hp = enemy.hp - this.gunInventory[0].damage;
                         this.hp = this.hp - enemy.gunInventory[0].damage;
-                         game.gameConsole.write("You attacked enemy and dealt: " + this.gunInventory[0].damage + " damage! and received " + enemy.gunInventory[0].damage + " damage from his attack mode!");
+                        game.gameConsole.write("You attacked enemy and dealt: " + this.gunInventory[0].damage + " damage! and received " + enemy.gunInventory[0].damage + " damage from his attack mode!");
 
                     }
                 }
@@ -233,12 +233,12 @@ function Player(playerId, hp, activeGun) {
                 this.canAttack = false;
                 updateDom();
             } else {
-                 game.gameConsole.write("You need to move closer to attack!");
+                game.gameConsole.write("You need to move closer to attack!");
 
             }
 
         } else {
-             game.gameConsole.write("You can attack only once per turn!");
+            game.gameConsole.write("You can attack only once per turn!");
 
         }
 
@@ -330,7 +330,7 @@ var Game = function () {
                 /**/
 
             } else if (playerMoving.moveDistance > gameConstant.MIN_MOVE_DISTANCE && direction !== playerMoving.moveDirection) {
-                 game.gameConsole.write("You cannot move " + direction + ". You can only move " + playerMoving.moveDirection);
+                game.gameConsole.write("You cannot move " + direction + ". You can only move " + playerMoving.moveDirection);
                 /**/
 
                 /**/
@@ -429,11 +429,31 @@ var Game = function () {
 
                 case gameConstant.D_KEYBOARD:
 
-                    if (game.player1Turn) {
+                    switch (game.player1Turn) {
+                        case true:
+                            if (game.player1.canAttack) {
+                                game.player1.switchDefenseMode();
+                            } else {
+                                game.gameConsole.write("You attacked, you cannot switch anymore");
+                            }
+                            break;
+
+                        case false:
+                            if (game.player2.canAttack) {
+                                game.player2.switchDefenseMode();
+                            } else {
+                                game.gameConsole.write("You attacked, you cannot switch anymore");
+                            }
+                            break;
+                        default:
+                            console.log("some error happened while deciding whos turn it is");
+                    }
+
+                    /*if (game.player1Turn) {
                         game.player1.switchDefenseMode();
                     } else {
                         game.player2.switchDefenseMode();
-                    }
+                    }*/
                     console.log("Defense - D key: " + e.keyCode);
                     updateDom();
                     break;
@@ -461,7 +481,7 @@ var GameConsole = function () {
 
 
     var consoleOutput = document.getElementById("consoleOutput");
-    this.write = function(message){
+    this.write = function (message) {
 
         lineNumber++;
         consoleOutput.innerHTML += lineNumber + ": " + message + "<br> --- <br>";
