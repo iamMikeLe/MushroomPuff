@@ -1,2 +1,73 @@
 check.
 canvas translate method
+
+
+
+
+var imagesLoaded = 0;
+var maxNumImages = 8;
+var allImagesLoaded = false;
+var loadImage = function(){
+    imagesLoaded++;
+    if(imagesLoaded==maxNumImages){
+        allImagesLoaded = true;
+    }
+}
+
+
+var p1 = new Image();
+var p2 = new Image();
+var bushImage = new Image();
+var p_possible_move = new Image();
+
+
+var w1 = new Image();
+var w2 = new Image();
+var w3 = new Image();
+var w4 = new Image();
+
+p1.onload=loadImage;
+
+p2.onload=loadImage;
+
+bushImage.onload=loadImage;
+
+p_possible_move.onload=loadImage;
+
+w1.onload=loadImage;
+
+w2.onload=loadImage;
+
+w3.onload=loadImage;
+
+w4.onload=loadImage;
+
+imagesLoaded
+
+allImagesLoaded
+
+
+
+Console output:
+
+var GameConsole = function(){
+var lineNumber = 0;
+
+
+var consoleOutput = document.getElementById("consoleOutput");
+this.write = function(message){
+
+lineNumber++;
+consoleOutput.innerHTML = lineNumber + ": " + message;
+}
+
+this.clearConsole = function(){
+lineNumber = 0;
+consoleOutput.innerHTML = "";
+}
+
+}
+
+var g = new GameConsole();
+
+g.write("hello");
