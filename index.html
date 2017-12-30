@@ -5,7 +5,9 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>6th Project</title>
+
     <link rel="stylesheet" href="style.css">
+
 
 </head>
 
@@ -16,23 +18,16 @@
     </div>
 
     <div class="game_info">
-        <div class="rules">
-            <h3>Rules:</h3>
-            <p>For each turn, a player can move from one to three boxes (horizontally or vertically) before ending their turn (Q keyboard). If a player passes over a box containing a weapon, they leave their current weapon on site and replace it with the new one.</p>
-            <ul>
-                <li>Movement - ArrowKeys &#x2191; &#x2192; &#x2193; &#x2190;</li>
-                <li>End Round - Q key</li>
-                <li>Attack - A key</li>
-            </ul>
-        </div>
+
+         <button onclick="game.start();">New Game</button>
+
         <div class="game_console">
             <h3>Game Console:</h3>
             <p id="consoleOutput"></p>
         </div>
-
-        <div class="player_info">
+          <div class="player_info">
             <div class="player1">
-<!--                <img src="assets/p1_small.png" alt="Player1">-->
+                <img src="assets/p1_small.png" alt="Player1">
                 <h3 id="p1_turn">Player1</h3>
                 <ul>
                     <li><strong>HP:</strong> <span id="p1_hp"></span></li>
@@ -40,11 +35,11 @@
                     <li><strong>Damage:</strong> <span id="p1_damage"></span></li>
                     <li><strong>Movement(s) left:</strong> <span id="p1_movement"></span></li>
                     <li><strong>Can Attack:</strong> <span id="p1_attack"></span></li>
-                    <li><strong><span id="p1_defendMode"></span></strong></li>
+                    <li><strong>Defend Mode: <span id="p1_defendMode"></span></strong></li>
                 </ul>
             </div>
             <div class="player2">
-<!--                <img src="assets/p2_small.png" alt="Player1">-->
+                <img src="assets/p2_small.png" alt="Player1">
                 <h3 id="p2_turn">Player2</h3>
 
                 <ul>
@@ -53,14 +48,34 @@
                     <li><strong>Damage:</strong> <span id="p2_damage"></span></li>
                     <li><strong>Movement(s) left:</strong> <span id="p2_movement"></span></li>
                     <li><strong>Can Attack:</strong> <span id="p2_attack"></span></li>
-                    <li><strong><span id="p2_defendMode"></span></strong></li>
+                    <li><strong>Defend Mode: <span id="p2_defendMode"></span></strong></li>
                 </ul>
             </div>
 
         </div>
-        <div class="start_section">
-            <button onclick="game.start();">New Game</button>
+        <div class="rules">
+           <h3>Controls:</h3>
+           <ul>
+                <li>ArrowKeys &#x2191; &#x2192; &#x2193; &#x2190; - Movement</li>
+                <li>Q key - End Round</li>
+                <li>A key - Attack </li>
+            </ul>
+            <h3>Rules:</h3>
+            <p>For each turn, a player can move from one to three boxes (horizontally or vertically) before ending their turn (Q keyboard). If a player passes over a box containing a weapon, they leave their current weapon on site and replace it with the new one.
+            <br><br>
+            If player stands next to enemy, he can iniciate a battle using A key (only once per turn). There is a 50% change that player will miss when attacking.
+            <br><br>
+            When Defend Mode is ON, player receive 50% less damage. When Defend Mode is OFF, player receive full enemy weapon damage. Player Defend mode is reset automatically when enemy turn ends. Player Defend Mode turn OFF when player choose to attack enemy.
+            <br><br>
+            As soon as the life points of a player (initially 100) falls to 0, they lose. A message appears and the game is over.
+            </p>
+
         </div>
+
+
+
+
+
 
 
     </div>

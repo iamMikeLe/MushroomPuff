@@ -18,10 +18,22 @@ canvas.height = 800;
 
 var c = canvas.getContext("2d");
 
-
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
 //2.0 - Creating sprites
+
+// to make sure images are loaded before we run the rest of the code
+var imagesLoaded = 0;
+var maxNumImages = 8;
+var allImagesLoaded = false;
+var loadImage = function(){
+    imagesLoaded++;
+    if(imagesLoaded==maxNumImages){
+        allImagesLoaded = true;
+    }
+}
+
+
 var p1 = new Image();
 var p2 = new Image();
 var bushImage = new Image();
@@ -43,6 +55,20 @@ w2.src = "assets/weapon2.png";
 w3.src = "assets/weapon3.png";
 w4.src = "assets/weapon4.png";
 
+p1.onload=loadImage();
+p2.onload=loadImage();
+bushImage.onload=loadImage();
+p_possible_move.onload=loadImage();
+w1.onload=loadImage();
+w2.onload=loadImage();
+w3.onload=loadImage();
+w4.onload=loadImage();
+
+
+ while(allImagesLoaded == false){
+        //wait here while images gets loaded
+    }
+
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
@@ -52,6 +78,10 @@ function updateBoard() {
     canvas.height = canvas.height;
     var xPos = 0;
     var yPos = 0;
+
+
+
+
 
     for (var x = 0; x < game.board.layout.length; x++) {
         for (var y = 0; y < game.board.layout[x].length; y++) {
@@ -105,8 +135,8 @@ function updateBoard() {
         }
 
         c.clearRect(0, 0, canvas.width, canvas.height);
-        c.font = "30px Comic Sans MS";
-        c.fillStyle = "red";
+        c.font = "bold 30px Comic Sans MS";
+        c.fillStyle = "#be0000";
         c.textAlign = "center";
 
 
@@ -203,17 +233,17 @@ function updateDom() {
 
 
     if (game.player1.defendMode) {
-        $("#p1_defendMode").html("Defend Mode");
+        $("#p1_defendMode").html("ON");
     }
     if (game.player1.defendMode == false) {
-        $("#p1_defendMode").html("Attack Mode");
+        $("#p1_defendMode").html("OFF");
     }
 
     if (game.player2.defendMode) {
-        $("#p2_defendMode").html("Defend Mode");
+        $("#p2_defendMode").html("ON");
     }
     if (game.player2.defendMode == false) {
-        $("#p2_defendMode").html("Attack Mode");
+        $("#p2_defendMode").html("OFF");
     }
 
 

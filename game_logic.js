@@ -153,9 +153,8 @@ function Player(playerId, hp, activeGun) {
         switch (direction) {
             case "up":
                 if (this.y - 1 < 0 || game.board.layout[this.y - 1][this.x] == gameConstant.PLAYER2 || game.board.layout[this.y - 1][this.x] == gameConstant.PLAYER1 || game.board.layout[this.y - 1][this.x] == gameConstant.BUSH) {
+                    game.gameConsole.write("This move is not possible!");
 
-                    game.logNumber++;
-                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": This move is not possible!";
                     /**/
 
                 } else {
@@ -167,9 +166,8 @@ function Player(playerId, hp, activeGun) {
 
             case "right":
                 if (this.x + 1 > 9 || game.board.layout[this.y][this.x + 1] == gameConstant.PLAYER2 || game.board.layout[this.y][this.x + 1] == gameConstant.PLAYER1 || game.board.layout[this.y][this.x + 1] == gameConstant.BUSH) {
+                    game.gameConsole.write("This move is not possible!");
 
-                    game.logNumber++;
-                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": This move is not possible!";
                     /**/
                 } else {
                     this.x = this.x + 1;
@@ -180,8 +178,8 @@ function Player(playerId, hp, activeGun) {
 
             case "down":
                 if (this.y + 1 > 9 || game.board.layout[this.y + 1][this.x] == gameConstant.PLAYER2 || game.board.layout[this.y + 1][this.x] == gameConstant.PLAYER1 || game.board.layout[this.y + 1][this.x] == gameConstant.BUSH) {
-                    game.logNumber++;
-                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": This move is not possible!";
+                    game.gameConsole.write("This move is not possible!");
+
                     /**/
                 } else {
                     this.y = this.y + 1;
@@ -192,8 +190,7 @@ function Player(playerId, hp, activeGun) {
 
             case "left":
                 if (this.x - 1 < 0 || game.board.layout[this.y][this.x - 1] == gameConstant.PLAYER2 || game.board.layout[this.y][this.x - 1] == gameConstant.PLAYER1 || game.board.layout[this.y][this.x - 1] == gameConstant.BUSH) {
-                    game.logNumber++;
-                    consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": This move is not possible!";
+                    game.gameConsole.write("This move is not possible!");
 
                 } else {
                     this.x = this.x - 1;
@@ -212,18 +209,37 @@ function Player(playerId, hp, activeGun) {
 
         if (this.canAttack) {
             if ((enemy.x == this.x + 1 && enemy.y == this.y) || (enemy.x == this.x - 1 && enemy.y == this.y) || (enemy.y == this.y + 1 && enemy.x == this.x) || (enemy.y == this.y - 1 && enemy.x == this.x)) {
-                enemy.hp = enemy.hp - this.gunInventory[0].damage;
+
+
+                var dodgeChange = Math.round(Math.random());
+
+                if (dodgeChange == 1) {
+                    game.gameConsole.write("You attacked enemy but missed!");
+
+                } else {
+                    if (enemy.defendMode) {
+                        enemy.hp = enemy.hp - this.gunInventory[0].damage / 2;
+                        game.gameConsole.write("You attacked enemy and dealt: " + this.gunInventory[0].damage / 2 + " damage!");
+
+                    } else {
+                        enemy.hp = enemy.hp - this.gunInventory[0].damage;
+
+                        game.gameConsole.write("You attacked enemy and dealt: " + this.gunInventory[0].damage + " damage!");
+
+                    }
+                }
+
+                this.defendMode = false;
                 this.canAttack = false;
                 updateDom();
             } else {
+                game.gameConsole.write("You need to move closer to attack!");
 
-                game.logNumber++;
-                consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": You need to move closer to attack!";
             }
 
         } else {
-            game.logNumber++;
-            consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": You can attack only once per turn!";
+            game.gameConsole.write("You can attack only once per turn!");
+
         }
 
 
@@ -237,9 +253,7 @@ function Player(playerId, hp, activeGun) {
         }
     }
 
-    this.switchDefenseMode = function () {
-        this.defendMode = !this.defendMode;
-    }
+
 
 }
 
@@ -258,10 +272,10 @@ function Player(playerId, hp, activeGun) {
 var Game = function () {
 
     this.gameOn;
-    this.logNumber; //for tracking the game move number
+
 
     this.start = function () {
-        this.logNumber = 0;
+
         this.gameOn = true;
         clearConsole();
         this.board = new Board(10, 10);
@@ -274,9 +288,10 @@ var Game = function () {
         this.player1 = new Player(gameConstant.PLAYER1, gameConstant.PLAYER_HP, this.gun0);
         this.player2 = new Player(gameConstant.PLAYER2, gameConstant.PLAYER_HP, this.gun0);
         this.player1Turn = true; //to check whos turn it is
+        this.gameConsole = new GameConsole();
 
 
-        this.board.layout = [];
+        /*        this.board.layout = [];*/
         this.board.init();
 
         updateBoard();
@@ -309,13 +324,13 @@ var Game = function () {
         function moveAction(direction) {
 
             if (playerMoving.moveDistance >= gameConstant.MAX_MOVE_DISTANCE) {
-                game.logNumber++;
-                consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": You cannot move anymore! Only attack or Finish round";
+                game.gameConsole.write("You cannot move anymore! Only attack or Finish round");
                 /**/
 
             } else if (playerMoving.moveDistance > gameConstant.MIN_MOVE_DISTANCE && direction !== playerMoving.moveDirection) {
-                game.logNumber++;
-                consoleOutput.innerHTML += "<br> -----" + "<br>" + game.logNumber + ": You cannot move " + direction + ". You can only move " + playerMoving.moveDirection;
+                game.gameConsole.write("You cannot move " + direction + ". You can only move " + playerMoving.moveDirection);
+                /**/
+
                 /**/
 
             } else {
@@ -363,6 +378,13 @@ var Game = function () {
                 console.log(direction + " arrow: " + e.keyCode);
                 playerMoving.moveDirection = direction;
             }
+
+            /*if (playerMoving.moveDistance == 3 && playerMoving.canAttack == false) {
+                drawPossibleMoves_EndRound();
+                playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
+                updateDom();
+            }*/
+
         }
 
         if (game.gameOn) {
@@ -390,6 +412,15 @@ var Game = function () {
 
                 case gameConstant.Q_KEYBOARD:
                     updateBoard();
+
+                    if (game.player1Turn) {
+                        game.player2.defendMode = true;
+
+                    } else {
+                        game.player1.defendMode = true;
+
+                    }
+
                     drawPossibleMoves_EndRound();
                     playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
                     console.log("End round - Q key: " + e.keyCode);
@@ -410,16 +441,7 @@ var Game = function () {
                     updateDom();
                     break;
 
-                case gameConstant.D_KEYBOARD:
 
-                    if (game.player1Turn) {
-                        game.player1.switchDefenseMode();
-                    } else {
-                        game.player2.switchDefenseMode();
-                    }
-                    console.log("Defense - D key: " + e.keyCode);
-                    updateDom();
-                    break;
 
 
 
@@ -434,6 +456,25 @@ var Game = function () {
         //     canvas.height = canvas.height;
 
 
+    }
+
+}
+
+// game console object
+var GameConsole = function () {
+    var lineNumber = 0;
+
+
+    var consoleOutput = document.getElementById("consoleOutput");
+    this.write = function (message) {
+
+        lineNumber++;
+        consoleOutput.innerHTML += lineNumber + ": " + message + "<br> --- <br>";
+    }
+
+    this.clearConsole = function () {
+        lineNumber = 0;
+        consoleOutput.innerHTML = "";
     }
 
 }
