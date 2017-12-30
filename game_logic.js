@@ -223,13 +223,13 @@ function Player(playerId, hp, activeGun) {
 
                     } else {
                         enemy.hp = enemy.hp - this.gunInventory[0].damage;
-                        this.hp = this.hp - enemy.gunInventory[0].damage;
-                        game.gameConsole.write("You attacked enemy and dealt: " + this.gunInventory[0].damage + " damage! and received " + enemy.gunInventory[0].damage + " damage from his attack mode!");
+
+                        game.gameConsole.write("You attacked enemy and dealt: " + this.gunInventory[0].damage + " damage!");
 
                     }
                 }
 
-
+                this.defendMode = false;
                 this.canAttack = false;
                 updateDom();
             } else {
@@ -253,9 +253,7 @@ function Player(playerId, hp, activeGun) {
         }
     }
 
-    this.switchDefenseMode = function () {
-        this.defendMode = !this.defendMode;
-    }
+
 
 }
 
@@ -380,6 +378,13 @@ var Game = function () {
                 console.log(direction + " arrow: " + e.keyCode);
                 playerMoving.moveDirection = direction;
             }
+
+            /*if (playerMoving.moveDistance == 3 && playerMoving.canAttack == false) {
+                drawPossibleMoves_EndRound();
+                playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
+                updateDom();
+            }*/
+
         }
 
         if (game.gameOn) {
@@ -407,6 +412,15 @@ var Game = function () {
 
                 case gameConstant.Q_KEYBOARD:
                     updateBoard();
+
+                    if (game.player1Turn) {
+                        game.player2.defendMode = true;
+
+                    } else {
+                        game.player1.defendMode = true;
+
+                    }
+
                     drawPossibleMoves_EndRound();
                     playerMoving.moveDistance = gameConstant.MIN_MOVE_DISTANCE;
                     console.log("End round - Q key: " + e.keyCode);
@@ -427,36 +441,7 @@ var Game = function () {
                     updateDom();
                     break;
 
-                case gameConstant.D_KEYBOARD:
 
-                    switch (game.player1Turn) {
-                        case true:
-                            if (game.player1.canAttack) {
-                                game.player1.switchDefenseMode();
-                            } else {
-                                game.gameConsole.write("You attacked, you cannot switch anymore");
-                            }
-                            break;
-
-                        case false:
-                            if (game.player2.canAttack) {
-                                game.player2.switchDefenseMode();
-                            } else {
-                                game.gameConsole.write("You attacked, you cannot switch anymore");
-                            }
-                            break;
-                        default:
-                            console.log("some error happened while deciding whos turn it is");
-                    }
-
-                    /*if (game.player1Turn) {
-                        game.player1.switchDefenseMode();
-                    } else {
-                        game.player2.switchDefenseMode();
-                    }*/
-                    console.log("Defense - D key: " + e.keyCode);
-                    updateDom();
-                    break;
 
 
 

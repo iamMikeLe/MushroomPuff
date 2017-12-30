@@ -135,8 +135,8 @@ function updateBoard() {
         }
 
         c.clearRect(0, 0, canvas.width, canvas.height);
-        c.font = "30px Comic Sans MS";
-        c.fillStyle = "red";
+        c.font = "bold 30px Comic Sans MS";
+        c.fillStyle = "#be0000";
         c.textAlign = "center";
 
 
