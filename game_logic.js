@@ -1,14 +1,3 @@
-/*
-Content:
-0.0 - Game constants
-1.1 - Board Object constructor
-1.2 - Gun Object constructor
-1.3 - Player Object constructor
-2.0 - Creating objects instances
-3.0 - Start function
-4.0 - Event listener
-
-*/
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
@@ -260,24 +249,19 @@ function Player(playerId, hp, activeGun) {
 
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
-// 2.0 - Creating objects instances
-
-
-
-
-/*-------------------------------------------------------------------*/
-/*-------------------------------------------------------------------*/
-// 2.1 - Game object - inicialize a new game
+// 2.0 - Game object - inicialize a new game
 
 var Game = function () {
 
     this.gameOn;
 
-
     this.start = function () {
 
         this.gameOn = true;
-        clearConsole();
+        this.gameConsole = new GameConsole();
+        this.gameConsole.clearConsole();
+
+         // Creating objects instances
         this.board = new Board(10, 10);
 
         this.gun0 = new Gun("Baloon", gameConstant.GUN_BALOON, gameConstant.LOW_DMG);
@@ -287,8 +271,9 @@ var Game = function () {
 
         this.player1 = new Player(gameConstant.PLAYER1, gameConstant.PLAYER_HP, this.gun0);
         this.player2 = new Player(gameConstant.PLAYER2, gameConstant.PLAYER_HP, this.gun0);
+
         this.player1Turn = true; //to check whos turn it is
-        this.gameConsole = new GameConsole();
+
 
 
         /*        this.board.layout = [];*/
@@ -301,10 +286,6 @@ var Game = function () {
         console.log(game.board.layout);
     }
 
-
-    /*-------------------------------------------------------------------*/
-    /*-------------------------------------------------------------------*/
-    // 3.0 - Start function - starts the game once called
 
     /*-------------------------------------------------------------------*/
     /*-------------------------------------------------------------------*/
@@ -460,7 +441,7 @@ var Game = function () {
 
 }
 
-// game console object
+//  game console object
 var GameConsole = function () {
     var lineNumber = 0;
 

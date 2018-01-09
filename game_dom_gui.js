@@ -2,10 +2,11 @@
 1.0 - Creating Canvas
 2.0 - Creating sprites
 3.0 - This function will update the canvas game instance(refresh canvas)
-3.1 This function calculates players possible movements
-3.2 This function draws possible moves once called
+4.0 - This function calculates players possible movements
+4.1 - This function draws possible moves once called and switch player turn
 5.0 - This function updates DOM elements once called (colors, text)
-6.0 - This function will clear the game console section element
+6.0 - This function will clear the game DOM section element
+7.0 - this function help us keep the newly appended p child in view
 */
 
 
@@ -79,10 +80,6 @@ function updateBoard() {
     var xPos = 0;
     var yPos = 0;
 
-
-
-
-
     for (var x = 0; x < game.board.layout.length; x++) {
         for (var y = 0; y < game.board.layout[x].length; y++) {
 
@@ -145,7 +142,7 @@ function updateBoard() {
 }
 
 
-// 3.1 This function calculates players possible movements
+// 4.0 This function calculates players possible movements
 function possibleMoves(playerTrue, playerFalse) {
 
     var i1 = 1;
@@ -181,7 +178,7 @@ function possibleMoves(playerTrue, playerFalse) {
 }
 
 
-// 3.2 This function draws possible moves once called and switch player moves
+// 4.1 This function draws possible moves once called and switch player turn
 function drawPossibleMoves_EndRound() {
     if (game.player1Turn) {
         game.player1Turn = false;
@@ -193,11 +190,6 @@ function drawPossibleMoves_EndRound() {
         possibleMoves(game.player1, gameConstant.PLAYER2);
     }
 }
-
-/*---------------------------------------------------------------*/
-/*-----------------------DOM Manipulation------------------------*/
-/*---------------------------------------------------------------*/
-
 
 
 /*-------------------------------------------------------------------*/
@@ -252,7 +244,6 @@ function updateDom() {
         $(".player1").css("background-color", "#adf37f");
         $(".player2").css("background-color", "white");
 
-        /*Why is JQuery not working for selecting p1_turn?*/
         $("#p1_turn").html("Player1: <span style=\"color: red;\">It's my turn!</span>");
         $("#p2_turn").html("Player2");
     } else {
@@ -268,12 +259,7 @@ function updateDom() {
 }
 /*-------------------------------------------------------------------*/
 /*-------------------------------------------------------------------*/
-//6.0 - This function will clear the game console section element
-function clearConsole() {
-
-    $("#consoleOutput").html("");
-
-}
+//6.0 - This function will clear the game DOM section element
 
 function clearDom() {
     $("#p1_hp").html("");
@@ -289,7 +275,7 @@ function clearDom() {
 
 }
 
-//this function help us keep the newly appended p child in view
+//7.0 - this function help us keep the newly appended p child in view
 function outputScrollDown() {
     $('#consoleOutput').stop().animate({
         scrollTop: $('#consoleOutput')[0].scrollHeight
