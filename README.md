@@ -1,6 +1,7 @@
 ## Quick Start
 ​
-Open index.html and press Start button to start a round
+1. Clone/download game files and extract to a folder. 
+2. Open index.html and press Start button to start a round
 ​
 ## Features
 ### Controls
